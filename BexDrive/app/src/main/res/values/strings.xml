@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">BexDrive</string>
+    <string name="cihaz_kay_t">Cihaz Kayıt</string>
+    <string name="cihaz_kay_t_kullan_c_ad">Cihaz Kayıt Kullanıcı Adı</string>
+    <string name="cihaz_kay_t_ifre">Cihaz Kayıt Şifre</string>
+    <string name="cihaz_kaydet">Cihazı Kaydet</string>
+    <string name="cihaz_numaras">Cihaz Numarası</string>
+    <string name="kullan_c_giri">Kullanıcı Giriş</string>
+    <string name="kullan_c_ad">Kullanıcı Adı</string>
+    <string name="ifre">Şifre</string>
+    <string name="kullan_c_giri_yap">Kullanıcı Giriş Yap</string>
+    <string name="kullan_c_ad_ile_giri_yap">Kullanıcı adı ile giriş yap.</string>
+</resources>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".login.LoginFragment">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.bexdrive.login.LoginViewModel" />
+    </data>
+
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_margin="25dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/register_background_shape"
+            android:alpha="0.9"/>
+
+        <TextView
+            android:id="@+id/header_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cihaz_numaras"
+            android:textColor="@color/color_white"
+            android:layout_centerHorizontal="true"
+            android:textSize="40sp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="25dp"/>
+
+        <TextView
+            android:id="@+id/header2_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/kullan_c_giri"
+            android:textColor="@color/color_white"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@id/header_login"/>
+
+        <TextView
+            android:id="@+id/username_txt_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/kullan_c_ad"
+            android:textColor="@color/color_white"
+            android:layout_below="@id/header2_login"
+            android:layout_marginHorizontal="10dp"/>
+
+        <EditText
+            android:id="@+id/device_username_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/username_txt_login"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginBottom="15dp"
+            android:layout_marginHorizontal="10dp"/>
+
+        <TextView
+            android:id="@+id/password_txt_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ifre"
+            android:textColor="@color/color_white"
+            android:layout_below="@id/device_username_login"
+            android:layout_marginHorizontal="10dp"/>
+
+        <EditText
+            android:id="@+id/device_password_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/password_txt_login"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginBottom="25dp"
+            android:layout_marginHorizontal="10dp"/>
+
+        <Button
+            android:id="@+id/btn_finish_login"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="@string/kullan_c_giri_yap"
+            android:layout_below="@id/device_password_login"
+            android:background="@drawable/button_background"
+            android:layout_marginHorizontal="10dp"
+            android:textColor="@color/color_white"
+            android:padding="5dp"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
+
+</layout>
+
