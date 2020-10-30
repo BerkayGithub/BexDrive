@@ -7,104 +7,149 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
-import com.example.bexdrive.R
+import androidx.lifecycle.*
+import com.example.bexdrive.DaggerClass
 import com.example.bexdrive.listener.RegisterListener
-import com.example.bexdrive.login.LoginFragment
+import com.example.bexdrive.network.response.AuthResponse
+import com.example.bexdrive.network.response.CenterTokenResponse
+import com.example.bexdrive.network.response.LoginResponse
 import com.example.bexdrive.repository.CenterRepository
+import com.example.bexdrive.repository.ProxyRepository
 import com.example.bexdrive.util.Coroutine
-import kotlinx.android.synthetic.main.register_fragment.*
+import com.example.bexdrive.util.SingleLiveEvent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Response
+import java.nio.charset.StandardCharsets
 import java.util.*
-import javax.inject.Inject
 
 class RegisterViewModel @ViewModelInject constructor(
-    application: Application,
+    @ApplicationContext private val context: Context,
     private val repository: CenterRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     lateinit var registerListener: RegisterListener
     var username : String? = null
     var password : String? = null
     var data : String? = null
     var activity : Activity? = null
-    var context : Context? = null
-    var manufacturer : String? = null
-    var serial : String? = null
-    var UUID : String? = null
+    var basicProxyToken = String()
+    var status = -1
 
-    val varNav1 = MutableLiveData<Boolean>()
+    private val _successLiveEvent: MutableLiveData<String> = MutableLiveData("")
+    private val _navigateLoginPageLiveEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    init{
-        varNav1.value = true
+    fun successLiveData(): LiveData<String> = _successLiveEvent
+    fun navigateLoginPageLiveData(): LiveData<Boolean> = _navigateLoginPageLiveEvent
+
+    fun openLoginFragment(){
+        _navigateLoginPageLiveEvent.postValue(true)
     }
 
-    fun changNavValue() : LiveData<Boolean> {
-        if(varNav1.value == true)
-            varNav1.value = false
-        else
-            varNav1.value = true
-        return varNav1
-    }
 
-    fun openLoginFragment(view: View){
-        changNavValue()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun onRegisterButtonClicked(view: View){
-
-        if(username.isNullOrEmpty() || password.isNullOrEmpty()){
-            registerListener.onFailure("Invalid username or password!")
+    fun onRegisterButtonClicked(){
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return
         }
 
-        Coroutine.main {
+        if(username.isNullOrEmpty() || password.isNullOrEmpty()){
+            _successLiveEvent.postValue("Invalid username or password!")
+            return
+        }
+
+        viewModelScope.launch {
+            //First get the arguments to give to the services
             val text = "$username:$password"
-            val bytes = text.toByteArray()
-            val base64Str = String(Base64.getEncoder().encode(bytes))
+            val base64Str : String
 
-            //Get the token from centerApi
-            val getTokenResponse = repository.getToken("Basic $base64Str")
-            if(getTokenResponse.isSuccessful){
-                val accessToken = getTokenResponse.body()!!.access_token
-                registerListener.onSuccess("Api Key $accessToken")
+            val UUID = Build.ID
+            val manufacturer = Build.MANUFACTURER
+            var serial = ""
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                serial = Build.getSerial()
+                val bytes = text.toByteArray()
+                base64Str = String(Base64.getEncoder().encode(bytes))
+            } else{
+                serial = Build.SERIAL
+                val data = text.toByteArray(StandardCharsets.UTF_8)
+                base64Str = android.util.Base64.encodeToString(data, android.util.Base64.NO_WRAP)
+            }
 
-                //Start working the checkDeviceRegistration service
-                val registerResponse = repository.userLogin("Bearer $accessToken", UUID!!, "", manufacturer!!, "Android", serial!!, "1")
-                if (registerResponse.isSuccessful){
-                    if (registerResponse.body()?.Result == true){
-                        registerListener.onSuccess("Cihaz başarıyla kayıt edildi.")
-                        println(registerResponse.body()!!.BasicProxyToken)
-                        println(registerResponse.body()!!.ProxyServiceUrl)
-                        println(registerResponse.body()!!.Status)
-                        println(registerResponse.body()!!.VehicleID)
-                        println(registerResponse.body()!!.VehiclePlate)
-                        println(registerResponse.body()!!.CorporationName)
-                        println(registerResponse.body()!!.ID)
-                        println(registerResponse.body()!!.Result)
-                        println(registerResponse.body()!!.Code)
-                        println(registerResponse.body()!!.Message)
-
-                    }else{
-                        registerListener.onFailure("Cihaz kayıt edilemedi!")
-                        print(registerResponse.body()!!.Message)
-                    }
-                }else{
-                    registerListener.onFailure("Error code : ${registerResponse.code()}")
+            //Now call the centerApi/token and centerApi/checkRegisterDevice services
+            var registerResponse: Response<AuthResponse>? = null
+            withContext(Dispatchers.IO) {
+                //Get the token from centerApi
+                val getTokenResponse = repository.getToken("Basic $base64Str")
+                if (getTokenResponse.isSuccessful) {
+                    val accessToken = getTokenResponse.body()!!.access_token
+                    _successLiveEvent.postValue("Api Key : $accessToken")
+                    //Start working the checkDeviceRegistration service
+                    registerResponse = repository.userLogin("Bearer $accessToken", UUID, "", manufacturer, "Android", serial, "1")
+                } else {
+                    _successLiveEvent.postValue("Error code : ${getTokenResponse.code()}")
                 }
+            }
 
-            }else{
-                registerListener.onFailure("Error code : ${getTokenResponse.code()}")
+            registerResponse?.let {registerResponse ->
+                if (registerResponse.isSuccessful){
+                    registerResponse.body()?.apply {
+                        if (Result == true){
+                            status = this.Status!!
+                            if(status == 2){//passive
+                                _successLiveEvent.postValue("Bu cihaz pasiftir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
+                            }else if(status == 1){//active
+                                DaggerClass.vehicleID = this.VehicleID
+                                DaggerClass.vehiclePlate = this.VehiclePlate
+                                DaggerClass.deviceID = this.ID
+                                DaggerClass.corporationName = this.CorporationName
+                                basicProxyToken = this.BasicProxyToken.toString()
+                                _navigateLoginPageLiveEvent.postValue(true)
+                            }else if(status == 0){//created
+                                _successLiveEvent.postValue("Cihaz sisteme eklenmiştir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
+                                        " Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
+                            }
+                            //Register başarıyla bittiyse proxyAPI'dan token almak için api/auth/token servisini çalıştır.
+                        }else{
+                            _successLiveEvent.postValue("Cihaz kayıt edilemedi!")
+                            print(registerResponse.body()!!.Message)
+                        }
+                    }
+
+                }else{
+                    _successLiveEvent.postValue("Error code : ${registerResponse.code()}")
+                }
             }
         }
     }
 
+    fun TokenDeneme() {
+        viewModelScope.launch {
+            val text = "$username:$password"
+            val base64Str : String
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                val bytes = text.toByteArray()
+                base64Str = String(Base64.getEncoder().encode(bytes))
+            } else{
+                val data = text.toByteArray(StandardCharsets.UTF_8)
+                base64Str = android.util.Base64.encodeToString(data, android.util.Base64.NO_WRAP)
+            }
+
+            withContext(Dispatchers.IO) {
+                //Get the token from centerApi
+                val getTokenResponse = repository.getToken("Basic $base64Str")
+                if (getTokenResponse.isSuccessful) {
+                    val accessToken = getTokenResponse.body()!!.access_token
+                    _successLiveEvent.postValue("Api Key : $accessToken")
+                } else {
+                    _successLiveEvent.postValue("Error code : ${getTokenResponse.code()}")
+                }
+            }
+        }
+    }
 }

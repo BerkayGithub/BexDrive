@@ -4,56 +4,64 @@ import android.app.Application
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.example.bexdrive.DaggerClass
 import com.example.bexdrive.listener.RegisterListener
+import com.example.bexdrive.network.response.CenterTokenResponse
+import com.example.bexdrive.network.response.LoginResponse
+import com.example.bexdrive.repository.CenterRepository
 import com.example.bexdrive.repository.ProxyRepository
 import com.example.bexdrive.util.Coroutine
+import com.example.bexdrive.util.SingleLiveEvent
+import kotlinx.coroutines.launch
+import retrofit2.Response
 import java.util.*
 
 class LoginViewModel @ViewModelInject constructor(
-    application: Application,
     private val repository : ProxyRepository
 ) : ViewModel() {
 
     lateinit var registerListener: RegisterListener
     var username : String? = null
     var password : String? = null
+    var basicProxyToken : String? = null
+
+    private val _successLiveEvent: MutableLiveData<String> = MutableLiveData("")
+    private val _navigateMainPageLiveEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
+
+    fun successLiveData(): LiveData<String> = _successLiveEvent
+    fun navigateMainPageLiveData(): LiveData<Boolean> = _navigateMainPageLiveEvent
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun onLoginButtonClicked(){
+    fun onLoginButtonClicked(){
         if(username.isNullOrEmpty() || password.isNullOrEmpty()){
             registerListener.onFailure("Invalid username or password!")
             return
         }
 
-        Coroutine.main{
-            val text = "$username:$password"
-            val bytes = text.toByteArray()
-            val base64Str = String(Base64.getEncoder().encode(bytes))
+        viewModelScope.launch {
+            var loginResponse : Response<LoginResponse>? = null
+            val tokenResponse: Response<CenterTokenResponse> = repository.getToken("Basic $basicProxyToken")
+            if (tokenResponse.isSuccessful){
+                val accessToken = tokenResponse.body()?.access_token
+                loginResponse = repository.userLogin("Bearer $accessToken", username!!, password!!)
+            }else{
+                registerListener.onFailure("Error code : ${tokenResponse.code()} while getting second token")
+            }
 
-            //Get the token from centerApi
-            val getTokenResponse = repository.getToken("Basic $base64Str")
-            if(getTokenResponse.isSuccessful){
-                val accessToken = getTokenResponse.body()!!.access_token
-                registerListener.onSuccess("Api Key $accessToken")
-
-                //Start working the authorization service
-                val loginResponse = repository.userLogin("Bearer $accessToken", username!!, password!!)
-                if (loginResponse.isSuccessful){
-                    if (loginResponse.body()?.Result == true){
-                        registerListener.onSuccess("Giriş başarılı.")
-
-                    }else{
-                        registerListener.onFailure("Giriş başarısız!")
-                        println(loginResponse.body()!!.Message)
+            loginResponse?.let {
+                if (it.isSuccessful){
+                    it.body()?.apply {
+                        if(Result == true){
+                            DaggerClass.employeeID = EmployeeID
+                            DaggerClass.employeeName = EmployeeName
+                            _successLiveEvent.postValue("$EmployeeName giriş yaptı!")
+                            _navigateMainPageLiveEvent.postValue(true)
+                        }
                     }
                 }else{
-                    registerListener.onFailure("Error code : ${loginResponse.code()}")
+                    _successLiveEvent.postValue("Error code : ${loginResponse.code()} during login service!")
                 }
-
-            }else{
-                registerListener.onFailure("Error code : ${getTokenResponse.code()}")
             }
         }
     }

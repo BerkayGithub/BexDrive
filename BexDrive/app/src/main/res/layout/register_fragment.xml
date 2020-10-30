@@ -84,7 +84,7 @@
             android:layout_marginHorizontal="10dp"
             android:textColor="@color/color_white"
             android:padding="5dp"
-            android:onClick="@{viewmodel.onRegisterButtonClicked}"/>
+            android:onClick="@{() -> viewmodel.onRegisterButtonClicked()}"/>
 
         <TextView
             android:id="@+id/txt_navigate_To_login_page"
@@ -96,7 +96,14 @@
             android:textColor="@color/color_white"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{viewmodel.openLoginFragment}"/>
+            android:onClick="@{() -> viewmodel.openLoginFragment()}"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_navigate_To_login_page"
+            android:text="Token Dene"
+            android:onClick="@{() -> viewmodel.TokenDeneme()}"/>
     </RelativeLayout>
 
 </FrameLayout>
