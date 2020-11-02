@@ -18,6 +18,7 @@ import com.example.bexdrive.R
 import com.example.bexdrive.databinding.RegisterFragmentBinding
 import com.example.bexdrive.listener.RegisterListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.register_fragment.*
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment(){
@@ -44,6 +45,10 @@ class RegisterFragment : Fragment(){
         super.onActivityCreated(savedInstanceState)
         viewModel.successLiveData().observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
+
+        viewModel.messageLiveData().observe(viewLifecycleOwner) {
+            txt_register_message.text = it
         }
 
         view?.let {view ->

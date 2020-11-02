@@ -63,7 +63,8 @@
             android:background="@drawable/edit_text_background"
             android:layout_marginBottom="15dp"
             android:layout_marginHorizontal="10dp"
-            android:text="@={viewmodel.username}"/>
+            android:text="@={viewmodel.username}"
+            android:padding="5dp"/>
 
         <TextView
             android:id="@+id/password_txt_login"
@@ -82,7 +83,8 @@
             android:background="@drawable/edit_text_background"
             android:layout_marginBottom="25dp"
             android:layout_marginHorizontal="10dp"
-            android:text="@={viewmodel.password}"/>
+            android:text="@={viewmodel.password}"
+            android:padding="5dp"/>
 
         <Button
             android:id="@+id/btn_finish_login"
