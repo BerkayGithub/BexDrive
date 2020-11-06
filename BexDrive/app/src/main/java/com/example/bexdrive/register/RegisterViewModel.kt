@@ -1,26 +1,23 @@
 package com.example.bexdrive.register
 
 import android.Manifest
-import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
-import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.bexdrive.DaggerClass
-import com.example.bexdrive.listener.RegisterListener
 import com.example.bexdrive.network.response.AuthResponse
-import com.example.bexdrive.network.response.CenterTokenResponse
-import com.example.bexdrive.network.response.LoginResponse
 import com.example.bexdrive.repository.CenterRepository
-import com.example.bexdrive.repository.ProxyRepository
-import com.example.bexdrive.util.Coroutine
 import com.example.bexdrive.util.SingleLiveEvent
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,33 +31,32 @@ class RegisterViewModel @ViewModelInject constructor(
     private val repository: CenterRepository
 ) : ViewModel() {
 
-    var username : String? = null
-    var password : String? = null
-    var data : String? = null
-    var activity : Activity? = null
-    var basicProxyToken = String()
-    var status = -1
+    var username : String = ""
+    var password : String = ""
+    var data : String = ""
+    var basicProxyToken : String = ""
+    private var status = -1
 
-    private val _successLiveEvent: MutableLiveData<String> = MutableLiveData("")
+
+    var message = ""
+
+    private val _successLiveEvent: MutableLiveData<String> = MutableLiveData()
     private val _message: MutableLiveData<String> = MutableLiveData("")
+    private val _snackbarLiveEvent: MutableLiveData<String> = MutableLiveData()
     private val _navigateLoginPageLiveEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
     fun successLiveData(): LiveData<String> = _successLiveEvent
     fun navigateLoginPageLiveData(): LiveData<Boolean> = _navigateLoginPageLiveEvent
     fun messageLiveData(): LiveData<String> = _message
-
-//    fun openLoginFragment(){
-//        _navigateLoginPageLiveEvent.postValue(true)
-//    }
-
+    fun snackbarLiveData(): LiveData<String> = _snackbarLiveEvent
 
     fun onRegisterButtonClicked(){
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return
         }
 
-        if(username.isNullOrEmpty() || password.isNullOrEmpty()){
-            _successLiveEvent.postValue("Invalid username or password!")
+        if(username.isEmpty() || password.isEmpty()){
+            _successLiveEvent.postValue("Username and Password can't be empty!")
             return
         }
 
@@ -92,7 +88,8 @@ class RegisterViewModel @ViewModelInject constructor(
                     //Start working the checkDeviceRegistration service
                     registerResponse = repository.userLogin("Bearer $accessToken", UUID, "", manufacturer, "Android", serial, "1")
                 } else {
-                    _successLiveEvent.postValue("Error code : ${getTokenResponse.code()}")
+                    _snackbarLiveEvent.postValue("Error code : ${getTokenResponse.code()}  \n" +
+                            "Servise bağlanırken hata oluştu!")
                 }
             }
 
@@ -101,62 +98,38 @@ class RegisterViewModel @ViewModelInject constructor(
                     registerResponse.body()?.apply {
                         if (Result == true){
                             status = this.Status!!
-                            if(status == 2){//passive
-                                _message.postValue("Bu cihaz pasiftir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
-                                Log.e("Register Response : " , "Bu cihaz pasiftir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
-                                        " Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
-                            }
-                            else if(status == 1){//active
-                                DaggerClass.vehicleID = this.VehicleID
-                                DaggerClass.vehiclePlate = this.VehiclePlate
-                                DaggerClass.deviceID = this.ID
-                                DaggerClass.corporationName = this.CorporationName
-                                basicProxyToken = this.BasicProxyToken.toString()
-                                _navigateLoginPageLiveEvent.postValue(true)
-                            }
-                            else if(status == 0){//created
-                                _message.postValue("Cihaz sisteme eklenmiştir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
-                                        " Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
-                                Log.e("Register Response : " , "Cihaz sisteme eklenmiştir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
-                                        " Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
+                            when (status) {
+                                2 -> {//passive
+                                    _message.postValue("Bu cihaz pasiftir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
+                                    Log.e("Register Response : " , "Bu cihaz pasiftir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
+                                            " Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
+                                }
+                                1 -> {//active
+                                    DaggerClass.vehicleID = this.VehicleID
+                                    DaggerClass.vehiclePlate = this.VehiclePlate
+                                    DaggerClass.deviceID = this.ID
+                                    DaggerClass.corporationName = this.CorporationName
+                                    basicProxyToken = this.BasicProxyToken.toString()
+                                    _navigateLoginPageLiveEvent.postValue(true)
+                                }
+                                0 -> {//created
+                                    _message.postValue("Cihaz sisteme eklenmiştir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
+                                            " Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
+                                    Log.e("Register Response : " , "Cihaz sisteme eklenmiştir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
+                                            " Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
+                                }
+                                //Register başarıyla bittiyse proxyAPI'dan token almak için api/auth/token servisini çalıştır.
                             }
                             //Register başarıyla bittiyse proxyAPI'dan token almak için api/auth/token servisini çalıştır.
                         }else{
-                            _successLiveEvent.postValue("Cihaz kayıt edilemedi!")
-                            print(registerResponse.body()!!.Message)
+                            _snackbarLiveEvent.postValue("Cihaz kayıt edilemedi!")
                         }
                     }
 
                 }else{
-                    _successLiveEvent.postValue("Error code : ${registerResponse.code()}")
+                    _snackbarLiveEvent.postValue("Error code : ${registerResponse.code()} \nServise bağlanırken hata oluştu!")
                 }
             }
         }
     }
-
-    /*fun TokenDeneme() {
-        viewModelScope.launch {
-            val text = "$username:$password"
-            val base64Str : String
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                val bytes = text.toByteArray()
-                base64Str = String(Base64.getEncoder().encode(bytes))
-            } else{
-                val data = text.toByteArray(StandardCharsets.UTF_8)
-                base64Str = android.util.Base64.encodeToString(data, android.util.Base64.NO_WRAP)
-            }
-
-            withContext(Dispatchers.IO) {
-                //Get the token from centerApi
-                val getTokenResponse = repository.getToken("Basic $base64Str")
-                if (getTokenResponse.isSuccessful) {
-                    val accessToken = getTokenResponse.body()!!.access_token
-                    _successLiveEvent.postValue("Api Key : $accessToken")
-                } else {
-                    _successLiveEvent.postValue("Error code : ${getTokenResponse.code()}")
-                }
-            }
-        }
-    }*/
 }

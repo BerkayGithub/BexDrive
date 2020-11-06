@@ -15,14 +15,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_margin="25dp">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/register_background_shape"
-            android:alpha="0.9"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:paddingBottom="25dp"
+        android:background="@drawable/register_background_shape">
 
         <TextView
             android:id="@+id/header_login"

@@ -1,21 +1,15 @@
 package com.example.bexdrive.login
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.example.bexdrive.DaggerClass
-
-import com.example.bexdrive.R
 import com.example.bexdrive.activity.MainActivity
 import com.example.bexdrive.databinding.LoginFragmentBinding
 import com.example.bexdrive.listener.RegisterListener
@@ -26,10 +20,6 @@ import kotlinx.android.synthetic.main.login_fragment.*
 @AndroidEntryPoint
 class LoginFragment : Fragment(), RegisterListener {
 
-    companion object {
-        fun newInstance() = LoginFragment()
-    }
-
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
@@ -39,8 +29,10 @@ class LoginFragment : Fragment(), RegisterListener {
         val binding = LoginFragmentBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
-        viewModel.registerListener = this
-        viewModel.basicProxyToken = arguments?.getString("basicProxyToken")
+        if(arguments != null){
+            viewModel.basicProxyToken = requireArguments().getString("basicProxyToken")!!
+        }
+
 
         return binding.root
     }
@@ -54,7 +46,7 @@ class LoginFragment : Fragment(), RegisterListener {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
 
-        view.let { view ->
+        view.let { _ ->
             viewModel.navigateMainPageLiveData().observe(viewLifecycleOwner) {
                 if(it) {
                     val intent = Intent(activity, MainActivity::class.java)

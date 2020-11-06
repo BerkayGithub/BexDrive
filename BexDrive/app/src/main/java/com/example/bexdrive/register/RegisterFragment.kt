@@ -16,16 +16,12 @@ import androidx.lifecycle.observe
 import androidx.navigation.Navigation
 import com.example.bexdrive.R
 import com.example.bexdrive.databinding.RegisterFragmentBinding
-import com.example.bexdrive.listener.RegisterListener
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.register_fragment.*
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment(){
-
-    companion object {
-        fun newInstance() = RegisterFragment()
-    }
 
     private val viewModel: RegisterViewModel by viewModels()
 
@@ -36,7 +32,6 @@ class RegisterFragment : Fragment(){
         val binding: RegisterFragmentBinding = RegisterFragmentBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
-        viewModel.activity = requireActivity()
 
         return binding.root
     }
@@ -45,6 +40,12 @@ class RegisterFragment : Fragment(){
         super.onActivityCreated(savedInstanceState)
         viewModel.successLiveData().observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
+
+        viewModel.snackbarLiveData().observe(viewLifecycleOwner) {
+            var mySnackbar = Snackbar.make(layout_register, it, Snackbar.LENGTH_INDEFINITE)
+            mySnackbar.setAction("Close", View.OnClickListener { mySnackbar.dismiss() })
+            mySnackbar.show()
         }
 
         viewModel.messageLiveData().observe(viewLifecycleOwner) {
