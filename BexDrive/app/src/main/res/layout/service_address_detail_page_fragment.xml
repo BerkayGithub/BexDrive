@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".currentService.serviceaddressdetail.ServiceAddressDetailPage">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.bexdrive.currentService.serviceaddressdetail.ServiceAddressDetailPageViewModel" />
+    </data>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="25dp"
+    android:paddingVertical="40dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@{viewmodel.addressName}"
+        android:textSize="50sp"
+        android:textColor="@color/color_white"
+        android:background="@color/color_lightgrey"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@{viewmodel.fullAddress}"
+        android:layout_marginBottom="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_lightgrey"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@{viewmodel.deliveryDate}"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/paket_bilgileri"
+        android:textStyle="bold"
+        android:textSize="25sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/color_lightgrey"
+        android:layout_marginBottom="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/package_address_bg"
+        android:text="Paket Numarası"
+        android:padding="5dp"
+        android:layout_marginBottom="10dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/color_lightgrey"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/paketleri_teslim_et"
+        android:background="@drawable/button_background"
+        android:backgroundTint="@color/color_green2"
+        android:textColor="@color/color_white"
+        android:paddingHorizontal="15dp"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
+
+</layout>

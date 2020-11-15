@@ -10,4 +10,26 @@
     <string name="ifre">Şifre</string>
     <string name="kullan_c_giri_yap">Kullanıcı Giriş Yap</string>
     <string name="kullan_c_ad_ile_giri_yap">Kullanıcı adı ile giriş yap.</string>
+    <string name="mevcut_servisim">Mevcut Servisim</string>
+    <string name="konumumu_g_ncelle">Konumumu Güncelle</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="item_name">Item Name</string>
+    <string name="service_adress">Service Adress</string>
+    <string name="delivery_date">Delivery Date</string>
+    <string name="haritada_g_ster">Haritada Göster</string>
+    <string name="paketleri_g_ster">Paketleri Göster</string>
+    <string name="teslim_et">Teslim Et</string>
+    <string name="mevcut_servisimi_kontrol_et">Mevcut Servisimi Kontrol Et</string>
+    <string name="yola_kmaya_haz_r_m_s_n_z">Yola çıkmaya hazır mısınız?</string>
+    <string name="servisi_ba_latarak_adresleri_ziyaret_edebilirsiniz">Servisi başlatarak adresleri ziyaret edebilirsiniz?</string>
+    <string name="tahmini_ba_lama_tarihi">Tahmini başlama tarihi:</string>
+    <string name="tahmini_tslm_tarihi">Tahmini teslim tarihi:</string>
+    <string name="servisi_ba_lat">Servisi Başlat</string>
+    <string name="paket_bilgileri">Paket Bilgileri</string>
+    <string name="paketleri_teslim_et">Paketleri Teslim Et</string>
+    <string name="ziyaret_edilecek_adresler">Ziyaret Edilecek Adresler</string>
+    <string name="harita">Harita</string>
+    <string name="u_ranan_adresler">Uğranan Adresler</string>
+    <string name="detay">Detay</string>
 </resources>

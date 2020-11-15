@@ -1,5 +1,6 @@
 package com.example.bexdrive.login
 
+import android.content.SharedPreferences
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,11 +22,13 @@ class LoginViewModel @ViewModelInject constructor(
     var password : String = ""
     var basicProxyToken : String = ""
 
-    private val _successLiveEvent: MutableLiveData<String> = MutableLiveData("")
+    private val _successLiveEvent: MutableLiveData<String> = MutableLiveData()
     private val _navigateMainPageLiveEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
     fun successLiveData(): LiveData<String> = _successLiveEvent
     fun navigateMainPageLiveData(): LiveData<Boolean> = _navigateMainPageLiveEvent
+
+    lateinit var sharedPreferences: SharedPreferences
 
     fun onLoginButtonClicked(){
         if(username.isEmpty() || password.isEmpty()){
@@ -38,6 +41,11 @@ class LoginViewModel @ViewModelInject constructor(
             val tokenResponse: Response<CenterTokenResponse> = repository.getToken("Basic $basicProxyToken")
             if (tokenResponse.isSuccessful){
                 val accessToken = tokenResponse.body()?.access_token
+
+                val editor: SharedPreferences.Editor = sharedPreferences.edit()
+                editor.putString("BearerToken", accessToken)
+                editor.apply()
+
                 loginResponse = repository.userLogin("Bearer $accessToken", username, password)
             }else{
                 _successLiveEvent.postValue("Error code : ${tokenResponse.code()} while getting second token")

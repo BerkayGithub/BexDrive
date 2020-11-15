@@ -2,11 +2,18 @@ package com.example.bexdrive.register
 
 
 import android.Manifest
+import android.app.ProgressDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -24,6 +31,8 @@ import kotlinx.android.synthetic.main.register_fragment.*
 class RegisterFragment : Fragment(){
 
     private val viewModel: RegisterViewModel by viewModels()
+    lateinit var linearLayout : LinearLayout
+    lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +41,15 @@ class RegisterFragment : Fragment(){
         val binding: RegisterFragmentBinding = RegisterFragmentBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
+
+//        val progressDialog = ProgressDialog(requireActivity())
+//        progressDialog.show()
+//        progressDialog.setContentView(R.layout.progress_dialog)
+//        progressDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+//        progressDialog.dismiss()
+
+        linearLayout = binding.linLayoutRegister
+        progressBar = binding.registerProgressBar
 
         return binding.root
     }
@@ -60,6 +78,18 @@ class RegisterFragment : Fragment(){
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        val sharedPreferences = requireActivity().getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
+        viewModel.sharedPreferences = sharedPreferences
+        if(!sharedPreferences.getString("DeviceName", "").isNullOrEmpty() && !sharedPreferences.getString("DevicePassword", "").isNullOrEmpty()){
+            viewModel.inputName = sharedPreferences.getString("DeviceName", "").toString()
+            viewModel.inputPassword = sharedPreferences.getString("DevicePassword", "").toString()
+            viewModel.checkDeviceRegister()
+        }
+
+        super.onStart()
     }
 
     override fun onResume() {

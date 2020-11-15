@@ -1,6 +1,8 @@
 package com.example.bexdrive.login
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +35,8 @@ class LoginFragment : Fragment(), RegisterListener {
             viewModel.basicProxyToken = requireArguments().getString("basicProxyToken")!!
         }
 
+        val sharedPreferences = requireActivity().getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
+        viewModel.sharedPreferences = sharedPreferences
 
         return binding.root
     }

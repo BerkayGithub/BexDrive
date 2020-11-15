@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav2"
+    app:startDestination="@id/nav_toBeVisitedAddress">
+
+    <fragment
+        android:id="@+id/nav_toBeVisitedAddress"
+        android:name="com.example.bexdrive.currentService.tobevisitedAddress.ToBeVisitedAddress"
+        android:label="to_be_visited_address_fragment"
+        tools:layout="@layout/to_be_visited_address_fragment" >
+        <action
+            android:id="@+id/action_nav_toBeVisitedAddress_to_serviceAddressDetailPage"
+            app:destination="@id/serviceAddressDetailPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_mapFragment"
+        android:name="com.example.bexdrive.currentService.map.MapFragment"
+        android:label="map_fragment"
+        tools:layout="@layout/map_fragment" />
+    <fragment
+        android:id="@+id/nav_visitedAddressFragment"
+        android:name="com.example.bexdrive.currentService.visitedAddresses.VisitedAddressFragment"
+        android:label="visited_address_fragment"
+        tools:layout="@layout/visited_address_fragment" />
+    <fragment
+        android:id="@+id/nav_detailFragment"
+        android:name="com.example.bexdrive.currentService.detail.DetailFragment"
+        android:label="detail_fragment"
+        tools:layout="@layout/detail_fragment" />
+    <fragment
+        android:id="@+id/serviceAddressDetailPage"
+        android:name="com.example.bexdrive.currentService.serviceaddressdetail.ServiceAddressDetailPage"
+        android:label="service_address_detail_page_fragment"
+        tools:layout="@layout/service_address_detail_page_fragment" >
+        <argument
+            android:name="Address"
+            app:argType="com.example.bexdrive.entity.Address" />
+    </fragment>
+</navigation>

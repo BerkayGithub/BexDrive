@@ -2,12 +2,11 @@ package com.example.bexdrive.register
 
 import android.Manifest
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,7 +16,6 @@ import com.example.bexdrive.DaggerClass
 import com.example.bexdrive.network.response.AuthResponse
 import com.example.bexdrive.repository.CenterRepository
 import com.example.bexdrive.util.SingleLiveEvent
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,6 +35,10 @@ class RegisterViewModel @ViewModelInject constructor(
     var basicProxyToken : String = ""
     private var status = -1
 
+    var inputName : String = ""
+    var inputPassword : String = ""
+
+    lateinit var sharedPreferences: SharedPreferences
 
     var message = ""
 
@@ -51,18 +53,24 @@ class RegisterViewModel @ViewModelInject constructor(
     fun snackbarLiveData(): LiveData<String> = _snackbarLiveEvent
 
     fun onRegisterButtonClicked(){
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return
-        }
-
         if(username.isEmpty() || password.isEmpty()){
             _successLiveEvent.postValue("Username and Password can't be empty!")
             return
         }
 
+        inputName = username
+        inputPassword = password
+        checkDeviceRegister()
+    }
+
+    fun checkDeviceRegister(){
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+
         viewModelScope.launch {
             //First get the arguments to give to the services
-            val text = "$username:$password"
+            val text = "$inputName:$inputPassword"
             val base64Str : String
 
             val UUID = Build.ID
@@ -110,6 +118,12 @@ class RegisterViewModel @ViewModelInject constructor(
                                     DaggerClass.deviceID = this.ID
                                     DaggerClass.corporationName = this.CorporationName
                                     basicProxyToken = this.BasicProxyToken.toString()
+
+                                    val editor : SharedPreferences.Editor = sharedPreferences.edit()
+                                    editor.putString("DeviceName", inputName)
+                                    editor.putString("DevicePassword", inputPassword)
+                                    editor.apply()
+
                                     _navigateLoginPageLiveEvent.postValue(true)
                                 }
                                 0 -> {//created
