@@ -43,7 +43,7 @@ class RegisterViewModel @ViewModelInject constructor(
     var message = ""
 
     private val _successLiveEvent: MutableLiveData<String> = MutableLiveData()
-    private val _message: MutableLiveData<String> = MutableLiveData("")
+    private val _message: MutableLiveData<String> = MutableLiveData()
     private val _snackbarLiveEvent: MutableLiveData<String> = MutableLiveData()
     private val _navigateLoginPageLiveEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 

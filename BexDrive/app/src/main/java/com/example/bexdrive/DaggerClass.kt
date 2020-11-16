@@ -14,6 +14,6 @@ class DaggerClass : Application(){
         var corporationName: String? = null
         var employeeID: Int? = null
         var employeeName: String? = null
-        var service: Service? = null
+        var service: List<Service>? = null
     }
 }

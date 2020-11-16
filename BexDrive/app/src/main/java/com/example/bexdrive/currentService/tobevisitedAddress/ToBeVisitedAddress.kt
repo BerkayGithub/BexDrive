@@ -56,7 +56,7 @@ class ToBeVisitedAddress : Fragment() {
 
         viewModel.serviceListLiveData().observe(viewLifecycleOwner){
             list = it
-            DaggerClass.service = list[0]
+            DaggerClass.service = list
             val viewManager = LinearLayoutManager(requireContext())
             val serviceAdapter = ServiceAdapter(list[0].Addresses)
             ToBeVisited_recycler_view.apply {

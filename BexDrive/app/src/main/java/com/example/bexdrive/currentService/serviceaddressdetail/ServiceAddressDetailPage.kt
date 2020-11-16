@@ -19,7 +19,7 @@ class ServiceAddressDetailPage : Fragment() {
 
     private val viewModel: ServiceAddressDetailPageViewModel by viewModels()
     lateinit var address: Address
-    //private val args by navArgs<ServiceAddressDetailPageArgs>()
+    private val args by navArgs<ServiceAddressDetailPageArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,10 +29,10 @@ class ServiceAddressDetailPage : Fragment() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-        //address = args.Address
-        //viewModel.addressName = address.Address
-        //viewModel.fullAddress = address.PointName
-        //viewModel.deliveryDate = "Tahmini teslim tarihi ${address.EstimatedDateDelivered}"
+        address = args.Address
+        viewModel.addressName = address.Address
+        viewModel.fullAddress = address.PointName
+        viewModel.deliveryDate = "Tahmini teslim tarihi ${address.EstimatedDateDelivered.toLocaleString()}"
 
         return binding.root
     }

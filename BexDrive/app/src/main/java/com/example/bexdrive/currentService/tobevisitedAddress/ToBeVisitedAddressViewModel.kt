@@ -33,16 +33,27 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
 
         viewModelScope.launch {
             //send request to the web service
-            val getServiceResponse = repository.getServices("Bearer $bearerToken", DaggerClass.vehicleID.toString(), true)
-            if (getServiceResponse.isSuccessful){
-                if (getServiceResponse.body()!!.Result) {
-                    responseMessage.postValue(getServiceResponse.body()!!.Message)
-                    serviceValues = getServiceResponse.body()!!.Services
-                    serviceList.postValue(serviceValues)
-                    val estStartDate = serviceValues[0].EstimatedTimeStarts.toLocaleString()
-                    estimatedStartTime.postValue("Tahmini başlama tarihi: $estStartDate")
-                }else{
-                    responseMessage.postValue(getServiceResponse.body()!!.Message)
+            if (DaggerClass.service != null){
+                serviceList.postValue(DaggerClass.service)
+                val estStartDate = DaggerClass.service!![0].EstimatedTimeStarts.toLocaleString()
+                estimatedStartTime.postValue("Tahmini başlama tarihi: $estStartDate")
+            }
+            else {
+                val getServiceResponse = repository.getServices(
+                    "Bearer $bearerToken",
+                    DaggerClass.vehicleID.toString(),
+                    true
+                )
+                if (getServiceResponse.isSuccessful) {
+                    if (getServiceResponse.body()!!.Result) {
+                        responseMessage.postValue(getServiceResponse.body()!!.Message)
+                        serviceValues = getServiceResponse.body()!!.Services
+                        serviceList.postValue(serviceValues)
+                        val estStartDate = serviceValues[0].EstimatedTimeStarts.toLocaleString()
+                        estimatedStartTime.postValue("Tahmini başlama tarihi: $estStartDate")
+                    } else {
+                        responseMessage.postValue(getServiceResponse.body()!!.Message)
+                    }
                 }
             }
         }
@@ -53,10 +64,5 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
         if (bearerToken.isNullOrEmpty()){
             return
         }
-
-//        viewModelScope.launch {
-//            val location = Location(0,0)
-//            val startServiceResponse = repository.startService(bearerToken, serviceList.value[0].ServiceID, location)
-//        }
     }
 }

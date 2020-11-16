@@ -9,8 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -42,12 +41,6 @@ class RegisterFragment : Fragment(){
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-//        val progressDialog = ProgressDialog(requireActivity())
-//        progressDialog.show()
-//        progressDialog.setContentView(R.layout.progress_dialog)
-//        progressDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-//        progressDialog.dismiss()
-
         linearLayout = binding.linLayoutRegister
         progressBar = binding.registerProgressBar
 
@@ -68,6 +61,10 @@ class RegisterFragment : Fragment(){
 
         viewModel.messageLiveData().observe(viewLifecycleOwner) {
             txt_register_message.text = it
+            if(progressBar.visibility == VISIBLE){
+                progressBar.visibility = GONE
+                linearLayout.visibility = VISIBLE
+            }
         }
 
         view?.let {view ->
@@ -87,6 +84,9 @@ class RegisterFragment : Fragment(){
             viewModel.inputName = sharedPreferences.getString("DeviceName", "").toString()
             viewModel.inputPassword = sharedPreferences.getString("DevicePassword", "").toString()
             viewModel.checkDeviceRegister()
+        }else{
+            progressBar.visibility = GONE
+            linearLayout.visibility = VISIBLE
         }
 
         super.onStart()
