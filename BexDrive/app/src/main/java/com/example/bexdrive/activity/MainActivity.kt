@@ -37,17 +37,17 @@ class MainActivity : AppCompatActivity() {
         drawer_Layout.addDrawerListener(toggle)
         toggle.syncState()
 
-//        val adapter = ViewPageAdapter(supportFragmentManager)
-//        adapter.addFragment(ToBeVisitedAddress(), "Ziyaret Edilecek Adresler")
-//        adapter.addFragment(MapFragment(), "Harita")
-//        adapter.addFragment(VisitedAddressFragment(), "Uğranan Adresler")
-//        adapter.addFragment(DetailFragment(), "Detay")
-//        main_viewpager.adapter = adapter
-//        main_tabLayout.setupWithViewPager(main_viewpager)
+        val adapter = ViewPageAdapter(supportFragmentManager)
+        adapter.addFragment(ToBeVisitedAddress(), "Ziyaret Edilecek Adresler")
+        adapter.addFragment(MapFragment(), "Harita")
+        adapter.addFragment(VisitedAddressFragment(), "Uğranan Adresler")
+        adapter.addFragment(DetailFragment(), "Detay")
+        main_viewpager.adapter = adapter
+        main_tabLayout.setupWithViewPager(main_viewpager)
 
-        val bottomNav = findViewById<BottomNavigationView>(R.id.main_bottom_nav)
+        /*val bottomNav = findViewById<BottomNavigationView>(R.id.main_bottom_nav)
         val navController = Navigation.findNavController(this, R.id.fragment_main)
-        bottomNav.setupWithNavController(navController)
+        bottomNav.setupWithNavController(navController)*/
 
     }
 }

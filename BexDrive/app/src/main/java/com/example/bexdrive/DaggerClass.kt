@@ -1,6 +1,7 @@
 package com.example.bexdrive
 
 import android.app.Application
+import com.example.bexdrive.entity.Location
 import dagger.hilt.android.HiltAndroidApp
 import com.example.bexdrive.entity.Service
 
@@ -15,5 +16,6 @@ class DaggerClass : Application(){
         var employeeID: Int? = null
         var employeeName: String? = null
         var service: List<Service>? = null
+        var location: Location? = null
     }
 }

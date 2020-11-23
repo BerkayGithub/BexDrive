@@ -24,7 +24,7 @@
     <string name="yola_kmaya_haz_r_m_s_n_z">Yola çıkmaya hazır mısınız?</string>
     <string name="servisi_ba_latarak_adresleri_ziyaret_edebilirsiniz">Servisi başlatarak adresleri ziyaret edebilirsiniz?</string>
     <string name="tahmini_ba_lama_tarihi">Tahmini başlama tarihi:</string>
-    <string name="tahmini_tslm_tarihi">Tahmini teslim tarihi:</string>
+    <string name="tahmini_tslm_tarihi">Tahmini teslim tarihi : %s</string>
     <string name="servisi_ba_lat">Servisi Başlat</string>
     <string name="paket_bilgileri">Paket Bilgileri</string>
     <string name="paketleri_teslim_et">Paketleri Teslim Et</string>
@@ -32,4 +32,10 @@
     <string name="harita">Harita</string>
     <string name="u_ranan_adresler">Uğranan Adresler</string>
     <string name="detay">Detay</string>
+    <string name="tebrikler_t_m_adresleri_tamamlad_n_z">Tebrikler, Tüm adresleri tamamladınız.</string>
+    <string name="servisi_bitirerek_bir_sonraki_servise_ait_bilgilere_ula_abilirsiniz">Servisi bitirerek bir sonraki servise ait bilgilere ulaşabilirsiniz.</string>
+    <string name="sevkiyat_noktas_na_git">Sevkiyat Noktasına Git</string>
+    <string name="servisi_bitir">Servisi Bitir</string>
+    <string name="tslm_tarihi">Gerçekleşen Teslimat Tarihi</string>
+    <string name="teslim_edilmi_paketleri_g_ster">Teslim Edilmiş Paketleri Göster</string>
 </resources>

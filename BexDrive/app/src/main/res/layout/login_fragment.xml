@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".login.LoginFragment">
 
@@ -9,94 +10,100 @@
             type="com.example.bexdrive.login.LoginViewModel" />
     </data>
 
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/loginbackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="25dp"
+        android:background="@drawable/register_background_shape"
         android:paddingBottom="25dp"
-        android:background="@drawable/register_background_shape">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/header_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="15dp"
             android:text="@string/cihaz_numaras"
             android:textColor="@color/color_white"
-            android:layout_centerHorizontal="true"
-            android:textSize="40sp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="25dp"/>
+            android:textSize="40sp" />
 
         <TextView
             android:id="@+id/header2_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/header_login"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
             android:text="@string/kullan_c_giri"
             android:textColor="@color/color_white"
-            android:layout_centerHorizontal="true"
-            android:textSize="20sp"
-            android:layout_marginBottom="15dp"
-            android:layout_below="@id/header_login"/>
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/username_txt_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/kullan_c_ad"
-            android:textColor="@color/color_white"
             android:layout_below="@id/header2_login"
-            android:layout_marginHorizontal="10dp"/>
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/kullan_c_ad"
+            android:textColor="@color/color_white" />
 
         <EditText
             android:id="@+id/device_username_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/username_txt_login"
-            android:background="@drawable/edit_text_background"
-            android:layout_marginBottom="15dp"
             android:layout_marginHorizontal="10dp"
-            android:text="@={viewmodel.username}"
-            android:padding="5dp"/>
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edit_text_background"
+            android:padding="5dp"
+            android:text="@={viewmodel.username}" />
 
         <TextView
             android:id="@+id/password_txt_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ifre"
-            android:textColor="@color/color_white"
             android:layout_below="@id/device_username_login"
-            android:layout_marginHorizontal="10dp"/>
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/ifre"
+            android:textColor="@color/color_white" />
 
         <EditText
             android:id="@+id/device_password_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/password_txt_login"
-            android:background="@drawable/edit_text_background"
-            android:layout_marginBottom="25dp"
             android:layout_marginHorizontal="10dp"
-            android:text="@={viewmodel.password}"
-            android:padding="5dp"/>
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/edit_text_background"
+            android:padding="5dp"
+            android:text="@={viewmodel.password}" />
 
         <Button
             android:id="@+id/btn_finish_login"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:text="@string/kullan_c_giri_yap"
             android:layout_below="@id/device_password_login"
-            android:background="@drawable/button_background"
             android:layout_marginHorizontal="10dp"
-            android:textColor="@color/color_white"
+            android:background="@drawable/button_background"
+            android:onClick="@{() -> viewmodel.onLoginButtonClicked()}"
             android:padding="5dp"
-            android:onClick="@{() -> viewmodel.onLoginButtonClicked()}"/>
+            android:text="@string/kullan_c_giri_yap"
+            android:textColor="@color/color_white" />
 
     </RelativeLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
 

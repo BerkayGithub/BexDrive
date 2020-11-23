@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".currentService.tobevisitedAddress.ToBeVisitedAddress">
+    tools:context=".currentService.tobevisitedAddress.ToBeVisitedAddress"
+    android:id="@+id/layout_to_be_visited">
 
     <data>
         <variable
@@ -13,18 +15,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lin_Layout_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/ToBeVisited_Info_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:text="@={viewmodel.responseMessage}"
-            android:id="@+id/ToBeVisited_Info_txt"
-            android:layout_margin="10dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_checkCurrentService"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btn_checkCurrentService"
@@ -33,16 +39,25 @@
             android:text="@string/mevcut_servisimi_kontrol_et"
             android:background="@drawable/button_background"
             android:textColor="@color/color_white"
-            android:layout_marginHorizontal="50dp"
-            android:textSize="17sp"/>
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="10dp"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ToBeVisited_Info_txt"
+            app:layout_constraintBottom_toTopOf="@id/relLayout_main"/>
 
         <RelativeLayout
             android:id="@+id/relLayout_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginHorizontal="30dp"
-            android:background="@drawable/layout_background">
+            android:background="@drawable/layout_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_checkCurrentService"
+            app:layout_constraintBottom_toTopOf="@id/ToBeVisited_recycler_view">
 
             <TextView
                 android:id="@+id/txt_Yla_çkm_hzr_msnz"
@@ -50,9 +65,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/yola_kmaya_haz_r_m_s_n_z"
                 android:textSize="35sp"
-                android:gravity="center"
-                android:paddingHorizontal="40dp"
-                android:layout_marginBottom="20dp"
+                android:padding="10dp"
                 android:textColor="@color/color_black"/>
 
             <TextView
@@ -61,9 +74,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/servisi_ba_latarak_adresleri_ziyaret_edebilirsiniz"
                 android:layout_below="@id/txt_Yla_çkm_hzr_msnz"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="80dp"
-                android:layout_marginBottom="20dp"
+                android:padding="10dp"
                 android:textColor="@color/color_black"/>
 
             <TextView
@@ -72,9 +83,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txt_srv_bsl_zyr_edb"
                 android:text="@={viewmodel.estimatedStartTime}"
-                android:gravity="center"
                 android:textColor="@color/color_black"
-                android:layout_marginBottom="10dp"/>
+                android:padding="10dp"/>
 
             <View
                 android:id="@+id/view_relLayout1"
@@ -82,7 +92,6 @@
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
                 android:layout_below="@id/txt_thm_bsl_trh"
-                android:layout_marginBottom="10dp"
                 android:layout_marginHorizontal="10dp"/>
 
             <Button
@@ -95,7 +104,9 @@
                 android:background="@drawable/button_background"
                 android:backgroundTint="@color/color_blue2"
                 android:textSize="17sp"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:onClick="@{() -> viewmodel.startService()}"/>
+
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -103,8 +114,87 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/service_row"
-            android:visibility="invisible"/>
-    </LinearLayout>
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/relLayout_main"
+            app:layout_constraintBottom_toTopOf="@id/relLayout2_main"/>
+
+        <RelativeLayout
+            android:id="@+id/relLayout2_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="30dp"
+            android:background="@drawable/layout_background"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ToBeVisited_recycler_view"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/txt_tbrk_tm_srv_tmm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tebrikler_t_m_adresleri_tamamlad_n_z"
+                android:textSize="35sp"
+                android:padding="10dp"
+                android:textColor="@color/color_black"/>
+
+            <TextView
+                android:id="@+id/txt_srv_btr_snr_srv_ulş"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/servisi_bitirerek_bir_sonraki_servise_ait_bilgilere_ula_abilirsiniz"
+                android:layout_below="@id/txt_tbrk_tm_srv_tmm"
+                android:padding="10dp"
+                android:textColor="@color/color_black"/>
+
+            <TextView
+                android:id="@+id/txt_thm_bt_trh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_srv_btr_snr_srv_ulş"
+                android:text="@={viewmodel.estimatedEndTime}"
+                android:textColor="@color/color_black"
+                android:padding="10dp"/>
+
+            <View
+                android:id="@+id/view_relLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@id/txt_thm_bt_trh"
+                android:layout_marginHorizontal="10dp"/>
+
+            <Button
+                android:id="@+id/btn_go_to_shipping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/view_relLayout2"
+                android:text="@string/sevkiyat_noktas_na_git"
+                android:textColor="@color/color_white"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@color/color_blue2"
+                android:textSize="17sp"
+                android:layout_margin="10dp"/>
+
+            <Button
+                android:id="@+id/btn_end_service"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btn_go_to_shipping"
+                android:text="@string/servisi_bitir"
+                android:textColor="@color/color_white"
+                android:background="@drawable/button_background"
+                android:textSize="17sp"
+                android:layout_margin="10dp"
+                android:onClick="@{() -> viewmodel.endService()}"/>
+
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
 

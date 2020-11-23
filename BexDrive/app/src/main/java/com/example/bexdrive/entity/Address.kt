@@ -8,11 +8,11 @@ import java.util.*
 class Address (
     val AddressID : String,
     val Sort : Int,
-    val isVisited : Boolean,
+    val IsVisited : Boolean,
     val Address : String,
     val PointName : String,
-    val Latitude : Int,
-    val Longitude : Int,
+    val Latitude : Double,
+    val Longitude : Double,
     val EstimatedDateDelivered : Date,
     val DateDelivered : Date
 ) : Parcelable

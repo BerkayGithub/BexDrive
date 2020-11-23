@@ -75,7 +75,7 @@ class RegisterViewModel @ViewModelInject constructor(
 
             val UUID = Build.ID
             val manufacturer = Build.MANUFACTURER
-            var serial = ""
+            val serial : String
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                 serial = Build.getSerial()
                 val bytes = text.toByteArray()

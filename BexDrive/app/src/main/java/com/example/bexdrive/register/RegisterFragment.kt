@@ -2,14 +2,13 @@ package com.example.bexdrive.register
 
 
 import android.Manifest
-import android.app.ProgressDialog
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -30,8 +29,8 @@ import kotlinx.android.synthetic.main.register_fragment.*
 class RegisterFragment : Fragment(){
 
     private val viewModel: RegisterViewModel by viewModels()
-    lateinit var linearLayout : LinearLayout
-    lateinit var progressBar: ProgressBar
+    private lateinit var linearLayout : LinearLayout
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,9 +53,9 @@ class RegisterFragment : Fragment(){
         }
 
         viewModel.snackbarLiveData().observe(viewLifecycleOwner) {
-            var mySnackbar = Snackbar.make(layout_register, it, Snackbar.LENGTH_INDEFINITE)
-            mySnackbar.setAction("Close", View.OnClickListener { mySnackbar.dismiss() })
-            mySnackbar.show()
+            val mySnackBar = Snackbar.make(layout_register, it, Snackbar.LENGTH_INDEFINITE)
+            mySnackBar.setAction("Close") { mySnackBar.dismiss() }
+            mySnackBar.show()
         }
 
         viewModel.messageLiveData().observe(viewLifecycleOwner) {

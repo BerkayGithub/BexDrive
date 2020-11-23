@@ -11,14 +11,19 @@
             type="com.example.bexdrive.register.RegisterViewModel" />
     </data>
 
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/loginbackground">
 
     <ProgressBar
         android:id="@+id/register_progressBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@drawable/screen"
+        android:padding="150dp"
+        style="?android:attr/progressBarPadding"
+        android:elevation="2dp" />
 
     <LinearLayout
         android:id="@+id/lin_Layout_register"
@@ -27,7 +32,11 @@
         android:layout_margin="25dp"
         android:background="@drawable/register_background_shape"
         android:orientation="vertical"
-        android:visibility="invisible">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/header_register"
@@ -55,8 +64,8 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_text_background"
-            android:text="@={viewmodel.username}"
-            android:padding="5dp"/>
+            android:padding="5dp"
+            android:text="@={viewmodel.username}" />
 
         <TextView
             android:id="@+id/password_txt_register"
@@ -72,12 +81,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="25dp"
+            android:autofillHints=""
             android:background="@drawable/edit_text_background"
             android:inputType="textPassword"
-            android:text="@={viewmodel.password}"
+            android:labelFor="@id/device_password_register"
             android:padding="5dp"
-            android:autofillHints=""
-            android:labelFor="@id/device_password_register"/>
+            android:text="@={viewmodel.password}" />
 
         <Button
             android:id="@+id/btn_finish_register"
@@ -96,12 +105,12 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
+            android:lines="5"
             android:padding="10dp"
             android:text="@{viewmodel.message}"
-            android:textColor="@color/color_white"
-            android:lines="5"/>
+            android:textColor="@color/color_white" />
 
     </LinearLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

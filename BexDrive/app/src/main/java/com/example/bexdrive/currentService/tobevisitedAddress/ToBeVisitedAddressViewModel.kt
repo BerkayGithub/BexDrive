@@ -1,6 +1,7 @@
 package com.example.bexdrive.currentService.tobevisitedAddress
 
 import android.content.SharedPreferences
+import android.icu.text.TimeZoneFormat
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,8 @@ import com.example.bexdrive.entity.Location
 import com.example.bexdrive.entity.Service
 import com.example.bexdrive.repository.ProxyRepository
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 class ToBeVisitedAddressViewModel @ViewModelInject constructor(
     var repository : ProxyRepository
@@ -19,10 +22,13 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
     lateinit var sharedPreferences: SharedPreferences
     var responseMessage : MutableLiveData<String> = MutableLiveData("")
     var estimatedStartTime : MutableLiveData<String> = MutableLiveData("")
+    var estimatedEndTime: MutableLiveData<String> = MutableLiveData("")
+    var serviceStateMessage: MutableLiveData<String> = MutableLiveData()
 
     private var serviceList: MutableLiveData<List<Service>> = MutableLiveData()
 
     fun serviceListLiveData(): LiveData<List<Service>> = serviceList
+    fun serviceStateMessageLiveData(): LiveData<String> = serviceStateMessage
 
     fun getServiceData(){
         val bearerToken = sharedPreferences.getString("BearerToken", "")
@@ -35,8 +41,12 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
             //send request to the web service
             if (DaggerClass.service != null){
                 serviceList.postValue(DaggerClass.service)
-                val estStartDate = DaggerClass.service!![0].EstimatedTimeStarts.toLocaleString()
+                val startdate = DaggerClass.service!![0].EstimatedTimeStarts
+                val enddate = DaggerClass.service!![0].EstimatedTimeEnds
+                val estStartDate = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(startdate)
+                val estEndDate = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(enddate)
                 estimatedStartTime.postValue("Tahmini başlama tarihi: $estStartDate")
+                estimatedEndTime.postValue("Tahmini bitiş tarihi: $estEndDate")
             }
             else {
                 val getServiceResponse = repository.getServices(
@@ -49,8 +59,12 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
                         responseMessage.postValue(getServiceResponse.body()!!.Message)
                         serviceValues = getServiceResponse.body()!!.Services
                         serviceList.postValue(serviceValues)
-                        val estStartDate = serviceValues[0].EstimatedTimeStarts.toLocaleString()
+                        val date = serviceValues[0].EstimatedTimeStarts
+                        val enddate = serviceValues[0].EstimatedTimeEnds
+                        val estStartDate = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(date)
+                        val estEndDate = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(enddate)
                         estimatedStartTime.postValue("Tahmini başlama tarihi: $estStartDate")
+                        estimatedEndTime.postValue("Tahmini bitiş tarihi: $estEndDate")
                     } else {
                         responseMessage.postValue(getServiceResponse.body()!!.Message)
                     }
@@ -63,6 +77,39 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
         val bearerToken = sharedPreferences.getString("BearerToken", "")
         if (bearerToken.isNullOrEmpty()){
             return
+        }
+
+        viewModelScope.launch {
+            val startServiceResponse = repository.startService("Bearer $bearerToken", DaggerClass.service!![0].ServiceID, DaggerClass.location!!)
+            if (startServiceResponse.isSuccessful){
+                if (startServiceResponse.body()!!.Result){
+                    serviceStateMessage.postValue("Servis Başlatıldı.")
+                }else{
+                    serviceStateMessage.postValue(startServiceResponse.body()!!.Message)
+                }
+            }else{
+                serviceStateMessage.postValue("Error : ${startServiceResponse.code()} \n Servise ulaşırken hata oluştu!")
+            }
+        }
+    }
+
+    fun endService(){
+        val bearerToken = sharedPreferences.getString("BearerToken", "")
+        if (bearerToken.isNullOrEmpty()){
+            return
+        }
+
+        viewModelScope.launch {
+            val endServiceResponse = repository.endService("Bearer $bearerToken", DaggerClass.service!![0].ServiceID, DaggerClass.location!!)
+            if(endServiceResponse.isSuccessful){
+                if (endServiceResponse.body()!!.Result){
+                    serviceStateMessage.postValue("Servis Bitirildi.")
+                }else {
+                    serviceStateMessage.postValue(endServiceResponse.body()!!.Message)
+                }
+            }else {
+                serviceStateMessage.postValue("Error : ${endServiceResponse.code()} \n Servise ulaşırken hata oluştu!")
+            }
         }
     }
 }

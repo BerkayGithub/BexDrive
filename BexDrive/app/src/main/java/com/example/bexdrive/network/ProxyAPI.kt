@@ -3,7 +3,11 @@ package com.example.bexdrive.network
 import com.example.bexdrive.entity.Location
 import com.example.bexdrive.network.response.*
 import com.example.bexdrive.util.DateDeserializer
+import com.example.bexdrive.util.Interceptors
 import com.google.gson.GsonBuilder
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -12,6 +16,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Header
 import retrofit2.http.POST
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 interface ProxyAPI {
@@ -76,7 +81,7 @@ interface ProxyAPI {
     ) : Response<SimpleResponse>
 
     @FormUrlEncoded
-    @POST("api/tms/deliverpackagestoaddress")
+    @POST("api/tms/deliverpackagestoadress")
     suspend fun deliverPackagesToAddress(
         @Header("Authorization") Authorization: String,
         @Field("ServiceID") ServiceID: String,
@@ -85,7 +90,7 @@ interface ProxyAPI {
     ) : Response<SimpleResponse>
 
     @FormUrlEncoded
-    @POST("api/tms/getpackageswhichdelivertoaddress")
+    @POST("api/tms/getpackageswhichdelivertoadress")
     suspend fun getPackagesWhichDeliverToAddress(
         @Header("Authorization") Authorization: String,
         @Field("ServiceID") ServiceID: String,
@@ -121,9 +126,17 @@ interface ProxyAPI {
             gsonBuilder.registerTypeAdapter(Date::class.java, DateDeserializer())
             val gson = gsonBuilder.setLenient().create()
 
+            val headerInterceptor = Interceptors()
+            val logger = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            val okHttpClient = OkHttpClient.Builder()
+                .callTimeout(15, TimeUnit.SECONDS)
+                .addInterceptor(headerInterceptor)
+                .addInterceptor(logger)
+
             return Retrofit.Builder()
                 .baseUrl("http://bex.drive.proxyapi.bexfa.com/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient.build())
                 .build()
                 .create(ProxyAPI::class.java)
         }
