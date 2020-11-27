@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bexdrive.BuildConfig
 import com.example.bexdrive.DaggerClass
 import com.example.bexdrive.network.response.AuthResponse
 import com.example.bexdrive.repository.CenterRepository
@@ -75,6 +76,7 @@ class RegisterViewModel @ViewModelInject constructor(
 
             val UUID = Build.ID
             val manufacturer = Build.MANUFACTURER
+            val version = BuildConfig.VERSION_NAME
             val serial : String
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                 serial = Build.getSerial()
@@ -94,7 +96,7 @@ class RegisterViewModel @ViewModelInject constructor(
                 if (getTokenResponse.isSuccessful) {
                     val accessToken = getTokenResponse.body()!!.access_token
                     //Start working the checkDeviceRegistration service
-                    registerResponse = repository.userLogin("Bearer $accessToken", UUID, "", manufacturer, "Android", serial, "1")
+                    registerResponse = repository.userLogin("Bearer $accessToken", UUID, "", manufacturer, "Android", serial, version)
                 } else {
                     _snackbarLiveEvent.postValue("Error code : ${getTokenResponse.code()}  \n" +
                             "Servise bağlanırken hata oluştu!")

@@ -65,7 +65,8 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_text_background"
             android:padding="5dp"
-            android:text="@={viewmodel.username}" />
+            android:text="@={viewmodel.username}"
+            android:inputType="text"/>
 
         <TextView
             android:id="@+id/password_txt_register"

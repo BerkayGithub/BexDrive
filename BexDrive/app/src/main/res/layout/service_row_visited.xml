@@ -11,7 +11,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="10dp">
 
     <androidx.cardview.widget.CardView
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@{String.format(@string/tahmini_tslm_tarihi, address.estimatedDateDelivered.toLocaleString())}"
+                android:text="@{String.format(@string/tahmini_tslm_tarihi, address.getFormattedDate(address.estimatedDateDelivered))}"
                 android:textStyle="bold" />
 
             <TextView
@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@{String.format(@string/tslm_tarihi, address.dateDelivered.toLocaleString())}"
+                android:text="@{String.format(@string/tslm_tarihi, address.getFormattedDate(address.dateDelivered))}"
                 android:textStyle="bold" />
 
             <View

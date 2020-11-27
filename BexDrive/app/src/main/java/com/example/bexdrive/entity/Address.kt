@@ -2,6 +2,7 @@ package com.example.bexdrive.entity
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.text.DateFormat
 import java.util.*
 
 @Parcelize
@@ -15,4 +16,8 @@ class Address (
     val Longitude : Double,
     val EstimatedDateDelivered : Date,
     val DateDelivered : Date
-) : Parcelable
+) : Parcelable {
+    fun getFormattedDate(date: Date): String {
+        return DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(date)
+    }
+}

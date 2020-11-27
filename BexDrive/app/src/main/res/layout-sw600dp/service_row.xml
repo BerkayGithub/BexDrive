@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<data>
+    <variable
+        name="address"
+        type="com.example.bexdrive.entity.Address" />
+</data>
+
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="30dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/layout_background">
+
+        <LinearLayout
+            android:id="@+id/lin_Layout_serviceRow"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_weight="1">
+
+            <TextView
+                android:id="@+id/txt_ItemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="sgnklnkls"
+                android:paddingBottom="10dp"
+                android:text="@{address.pointName}"
+                android:textColor="@color/color_black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_Item_serviceAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="vnknvslndvsl"
+                android:paddingBottom="10dp"
+                android:text="@{address.address}" />
+
+            <TextView
+                android:id="@+id/txt_Item_deliveryDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="dsvbjıbuıajbaj"
+                android:paddingBottom="10dp"
+                android:text="@{String.format(@string/tahmini_tslm_tarihi, address.getFormattedDate(address.estimatedDateDelivered))}"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/lin_Layout_serviceRow"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintHorizontal_chainStyle="spread">
+
+            <Button
+                android:id="@+id/btn_show_In_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_background"
+                android:backgroundTint="#5D6CB3"
+                android:text="@string/haritada_g_ster"
+                android:textColor="@color/color_white"
+                android:textSize="17sp" />
+
+            <Button
+                android:id="@+id/btn_show_packages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@color/color_blue2"
+                android:text="@string/paketleri_g_ster"
+                android:textColor="@color/color_white"
+                android:textSize="17sp" />
+
+            <Button
+                android:id="@+id/btn_deliver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@color/color_green2"
+                android:text="@string/teslim_et"
+                android:textColor="@color/color_white"
+                android:textSize="17sp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
+
+</layout>

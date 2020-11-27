@@ -11,4 +11,5 @@
     <color name="color_blue1">#3E4D95</color>
     <color name="color_blue2">#485AFA</color>
     <color name="color_green2">#53DF53</color>
+    <color name="drawerNoShadow">#00000000</color>
 </resources>

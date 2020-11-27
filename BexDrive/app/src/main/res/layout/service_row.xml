@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
-            android:text="@{String.format(@string/tahmini_tslm_tarihi, address.estimatedDateDelivered.toLocaleString())}"
+            android:text="@{String.format(@string/tahmini_tslm_tarihi, address.getFormattedDate(address.estimatedDateDelivered))}"
             android:textStyle="bold" />
 
         <View

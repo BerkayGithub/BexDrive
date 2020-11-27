@@ -1,8 +1,10 @@
 package com.example.bexdrive.currentService.serviceaddressdetail
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +15,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.bexdrive.DaggerClass
 import com.example.bexdrive.R
+import com.example.bexdrive.activity.MainActivity
 import com.example.bexdrive.databinding.ServiceAddressDetailPageFragmentBinding
 import com.example.bexdrive.entity.Address
 import com.google.android.material.snackbar.Snackbar
@@ -28,6 +29,7 @@ class ServiceAddressDetailPage : Fragment() {
 
     private val viewModel: ServiceAddressDetailPageViewModel by viewModels()
     lateinit var address: Address
+    lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +61,9 @@ class ServiceAddressDetailPage : Fragment() {
             binding.btnDeliverAddressDetail.visibility = GONE
         }
 
+        progressDialog = ProgressDialog(requireContext(), R.style.ProgressDialogStyle)
+        progressDialog.setMessage("Please Wait...")
+
         return binding.root
     }
 
@@ -68,7 +73,8 @@ class ServiceAddressDetailPage : Fragment() {
         viewModel.successMessageLiveData().observe(viewLifecycleOwner){
             val builder = AlertDialog.Builder(requireActivity(), R.style.CustomDialogTheme)
             builder.setTitle("Success").setMessage(it).setPositiveButton("OK") { _: DialogInterface, _: Int ->
-                requireActivity().finish()
+                val intent = Intent(requireActivity(), MainActivity::class.java)
+                startActivity(intent)
             }
             builder.show()
         }
@@ -95,6 +101,15 @@ class ServiceAddressDetailPage : Fragment() {
                 textView.setBackgroundResource(R.drawable.package_address_bg)
 
                 packages_layout.addView(textView)
+            }
+        }
+
+        viewModel.deliverProgressLiveData().observe(viewLifecycleOwner){
+            if(it == 1){
+                progressDialog.show()
+            }
+            if (it == 0){
+                progressDialog.dismiss()
             }
         }
 

@@ -3,10 +3,14 @@
     package="com.example.bexdrive">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"
+        android:required="true"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:required="true"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:required="true"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
+        android:required="true"/>
 
     <application
         android:name=".DaggerClass"
@@ -17,16 +21,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value=""/>
+
         <activity android:name=".activity.ServiceAddressDetailActivity"
-            android:parentActivityName=".activity.MainActivity"/>
-        <activity android:name=".activity.ShowAddressOnMap" />
-        <activity android:name=".activity.ChangeLocationActivity" />
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="nosensor"/>
+        <activity android:name=".activity.ShowAddressOnMap"
+            android:screenOrientation="nosensor"/>
+        <activity android:name=".activity.ChangeLocationActivity"
+            android:screenOrientation="nosensor"/>
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="nosensor"/>
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="nosensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

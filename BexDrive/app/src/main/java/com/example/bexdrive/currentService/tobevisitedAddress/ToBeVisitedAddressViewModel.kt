@@ -84,6 +84,30 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
             if (startServiceResponse.isSuccessful){
                 if (startServiceResponse.body()!!.Result){
                     serviceStateMessage.postValue("Servis Başlatıldı.")
+
+                    val serviceValues : List<Service>
+
+                    val getServiceResponse = repository.getServices(
+                        "Bearer $bearerToken",
+                        DaggerClass.vehicleID.toString(),
+                        true
+                    )
+                    if (getServiceResponse.isSuccessful) {
+                        if (getServiceResponse.body()!!.Result) {
+                            responseMessage.postValue(getServiceResponse.body()!!.Message)
+                            serviceValues = getServiceResponse.body()!!.Services
+                            serviceList.postValue(serviceValues)
+                            val date = serviceValues[0].EstimatedTimeStarts
+                            val enddate = serviceValues[0].EstimatedTimeEnds
+                            val estStartDate = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(date)
+                            val estEndDate = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(enddate)
+                            estimatedStartTime.postValue("Tahmini başlama tarihi: $estStartDate")
+                            estimatedEndTime.postValue("Tahmini bitiş tarihi: $estEndDate")
+                        } else {
+                            responseMessage.postValue(getServiceResponse.body()!!.Message)
+                        }
+                    }
+
                 }else{
                     serviceStateMessage.postValue(startServiceResponse.body()!!.Message)
                 }
@@ -104,6 +128,30 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
             if(endServiceResponse.isSuccessful){
                 if (endServiceResponse.body()!!.Result){
                     serviceStateMessage.postValue("Servis Bitirildi.")
+
+                    val serviceValues : List<Service>
+
+                    val getServiceResponse = repository.getServices(
+                        "Bearer $bearerToken",
+                        DaggerClass.vehicleID.toString(),
+                        true
+                    )
+                    if (getServiceResponse.isSuccessful) {
+                        if (getServiceResponse.body()!!.Result) {
+                            responseMessage.postValue(getServiceResponse.body()!!.Message)
+                            serviceValues = getServiceResponse.body()!!.Services
+                            serviceList.postValue(serviceValues)
+                            val date = serviceValues[0].EstimatedTimeStarts
+                            val enddate = serviceValues[0].EstimatedTimeEnds
+                            val estStartDate = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(date)
+                            val estEndDate = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(enddate)
+                            estimatedStartTime.postValue("Tahmini başlama tarihi: $estStartDate")
+                            estimatedEndTime.postValue("Tahmini bitiş tarihi: $estEndDate")
+                        } else {
+                            responseMessage.postValue(getServiceResponse.body()!!.Message)
+                        }
+                    }
+
                 }else {
                     serviceStateMessage.postValue(endServiceResponse.body()!!.Message)
                 }

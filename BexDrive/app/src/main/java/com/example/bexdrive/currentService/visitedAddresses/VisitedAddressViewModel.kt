@@ -35,18 +35,5 @@ class VisitedAddressViewModel @ViewModelInject constructor(
         }else{
             _errorMessage.postValue("Mevcut Servisiniz bulunmamaktadır.")
         }
-
-        /*viewModelScope.launch {
-            val response = repository.getServiceAddresses("Bearer $bearerToken", DaggerClass.service!![0].ServiceID)
-            if (response.isSuccessful){
-                if (response.body()!!.Result){
-                    addressList.postValue(response.body()!!.ServiceAddresses)
-                }else{
-                    _errorMessage.postValue(response.body()!!.Message)
-                }
-            }else{
-                _errorMessage.postValue("Error : ${response.code()} \n Servise ulasırken bir hata oluştu!")
-            }
-        }*/
     }
 }

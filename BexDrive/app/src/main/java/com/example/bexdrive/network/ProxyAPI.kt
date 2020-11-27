@@ -129,7 +129,10 @@ interface ProxyAPI {
             val headerInterceptor = Interceptors()
             val logger = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             val okHttpClient = OkHttpClient.Builder()
-                .callTimeout(15, TimeUnit.SECONDS)
+                .callTimeout(1, TimeUnit.MINUTES)
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(1, TimeUnit.MINUTES)
+                .writeTimeout(1, TimeUnit.MINUTES)
                 .addInterceptor(headerInterceptor)
                 .addInterceptor(logger)
 

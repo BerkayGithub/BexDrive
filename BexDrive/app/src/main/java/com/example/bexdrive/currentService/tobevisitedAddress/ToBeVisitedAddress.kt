@@ -16,6 +16,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.view.get
+import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +32,9 @@ import com.example.bexdrive.util.ServiceAdapter
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.detail_fragment.*
 import kotlinx.android.synthetic.main.register_fragment.*
+import kotlinx.android.synthetic.main.service_address_detail_page_fragment.view.*
 import kotlinx.android.synthetic.main.to_be_visited_address_fragment.*
 import java.io.IOException
 import java.util.*
@@ -77,9 +80,11 @@ class ToBeVisitedAddress : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.serviceStateMessageLiveData().observe(viewLifecycleOwner){
-            val mySnackbar = Snackbar.make(layout_to_be_visited, it, Snackbar.LENGTH_INDEFINITE)
-            mySnackbar.setAction("OK", View.OnClickListener { mySnackbar.dismiss() })
-            mySnackbar.show()
+            val mySnackBar = Snackbar.make(layout_to_be_visited, it, Snackbar.LENGTH_LONG)
+            mySnackBar.setAction("OK") {
+                mySnackBar.dismiss()
+            }
+            mySnackBar.show()
         }
 
         viewModel.serviceListLiveData().observe(viewLifecycleOwner){
@@ -93,6 +98,7 @@ class ToBeVisitedAddress : Fragment() {
                 btn_checkCurrentService.visibility = GONE
             }
 
+            addressList.clear()
             for (x in list[0].Addresses){
                 if (!x.IsVisited){
                     addressList.add(x)
@@ -105,6 +111,9 @@ class ToBeVisitedAddress : Fragment() {
                 layoutManager = viewManager
                 adapter = serviceAdapter
             }
+
+            ToBeVisited_progress.visibility = GONE
+            lin_Layout_main.visibility = VISIBLE
         }
 
         viewModel.getServiceData()

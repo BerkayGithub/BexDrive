@@ -36,6 +36,15 @@
     <string name="servisi_bitirerek_bir_sonraki_servise_ait_bilgilere_ula_abilirsiniz">Servisi bitirerek bir sonraki servise ait bilgilere ulaşabilirsiniz.</string>
     <string name="sevkiyat_noktas_na_git">Sevkiyat Noktasına Git</string>
     <string name="servisi_bitir">Servisi Bitir</string>
-    <string name="tslm_tarihi">Gerçekleşen Teslimat Tarihi</string>
+    <string name="tslm_tarihi">Gerçekleşen Teslimat Tarihi : %s</string>
     <string name="teslim_edilmi_paketleri_g_ster">Teslim Edilmiş Paketleri Göster</string>
+    <string name="servis_detay">Servis Detayı</string>
+    <string name="tahmini_ba_lama_zaman">Tahmini Başlama zamanı</string>
+    <string name="ba_lama_zaman">Başlama Zamanı</string>
+    <string name="tahmini_biti_zaman">Tahmini Bitiş Zamanı</string>
+    <string name="biti_zaman">Bitiş Zamanı</string>
+    <string name="paket_say_s">Paket Sayısı</string>
+    <string name="durak_say_s">Durak Sayısı</string>
+    <string name="ayarlar">Ayarlar</string>
+    <string name="k">Çıkış</string>
 </resources>

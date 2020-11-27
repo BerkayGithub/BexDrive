@@ -44,26 +44,27 @@ class VisitedAddressFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.addressListLiveData().observe(viewLifecycleOwner){
+            list.clear()
             for(x in it){
                 if(x.IsVisited){
                     list.add(x)
                 }
             }
             val viewManager = LinearLayoutManager(requireContext())
-            val visServiceadapter = VisitedServiceAdapter(list)
+            val visServiceAdapter = VisitedServiceAdapter(list)
             Visited_recycler_view.apply {
                 setHasFixedSize(true)
                 layoutManager = viewManager
-                adapter = visServiceadapter
+                adapter = visServiceAdapter
             }
         }
 
         viewModel.getServiceAddresses()
 
         viewModel.errorMessageLiveData().observe(viewLifecycleOwner){
-            val mySnackbar = Snackbar.make(layout_visited, it, Snackbar.LENGTH_INDEFINITE)
-            mySnackbar.setAction("OK", View.OnClickListener { mySnackbar.dismiss() })
-            mySnackbar.show()
+            val mySnackBar = Snackbar.make(layout_visited, it, Snackbar.LENGTH_INDEFINITE)
+            mySnackBar.setAction("OK") { mySnackBar.dismiss() }
+            mySnackBar.show()
         }
     }
 

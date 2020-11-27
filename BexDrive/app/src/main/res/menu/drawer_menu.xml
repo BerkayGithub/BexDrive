@@ -5,8 +5,16 @@
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/item_current_service"
-            android:title="@string/mevcut_servisim"/>
+            android:title="@string/mevcut_servisim"
+            android:icon="@drawable/ic_local_shipping_black"/>
         <item android:id="@+id/item_update_location"
-            android:title="@string/konumumu_g_ncelle"/>
+            android:title="@string/konumumu_g_ncelle"
+            android:icon="@drawable/ic_my_location_black_24dp"/>
+        <item android:id="@+id/item_settings"
+            android:title="@string/ayarlar"
+            android:icon="@drawable/ic_settings_black"/>
+        <item android:id="@+id/item_logout"
+            android:title="@string/k"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"/>
     </group>
 </menu>

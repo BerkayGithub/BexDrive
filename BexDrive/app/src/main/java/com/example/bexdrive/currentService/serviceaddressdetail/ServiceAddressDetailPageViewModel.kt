@@ -6,10 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bexdrive.DaggerClass
 import com.example.bexdrive.entity.Location
 import com.example.bexdrive.entity.Package
 import com.example.bexdrive.repository.ProxyRepository
 import kotlinx.coroutines.launch
+import java.text.DateFormat
 
 class ServiceAddressDetailPageViewModel @ViewModelInject constructor(
     val repository: ProxyRepository
@@ -28,10 +30,12 @@ class ServiceAddressDetailPageViewModel @ViewModelInject constructor(
     private var _packageList: MutableLiveData<List<Package>> = MutableLiveData()
     private val _errorMessage: MutableLiveData<String> = MutableLiveData()
     private val _successMessage: MutableLiveData<String> = MutableLiveData()
+    private val _deliverProgress: MutableLiveData<Int> = MutableLiveData()
 
     fun packageListLiveData(): LiveData<List<Package>> = _packageList
     fun errorMessageLiveData(): LiveData<String> = _errorMessage
     fun successMessageLiveData(): LiveData<String> = _successMessage
+    fun deliverProgressLiveData(): LiveData<Int> = _deliverProgress
 
     fun getPackagesWhichDeliverToAddress(ServiceID: String, AddressID: String){
         val bearerToken = sharedPreferences.getString("BearerToken", "")
@@ -60,14 +64,31 @@ class ServiceAddressDetailPageViewModel @ViewModelInject constructor(
         }
 
         viewModelScope.launch {
+            _deliverProgress.postValue(1)
             val response = repository.deliverPackagesToAddress("Bearer $bearerToken", ServiceID, AddressID, CurrentLocation)
             if (response.isSuccessful){
                 if (response.body()!!.Result){
-                    _successMessage.postValue("Paketler teslim edildi.")
+
+                    val getServiceResponse = repository.getServices(
+                        "Bearer $bearerToken",
+                        DaggerClass.vehicleID.toString(),
+                        true
+                    )
+                    if (getServiceResponse.isSuccessful) {
+                        if (getServiceResponse.body()!!.Result) {
+                            DaggerClass.service = getServiceResponse.body()!!.Services
+                            _successMessage.postValue("Paketler teslim edildi.")
+                        } else {
+                            _errorMessage.postValue(getServiceResponse.body()!!.Message)
+                        }
+                    }
+
                 }else {
+                    _deliverProgress.postValue(0)
                     _errorMessage.postValue(response.body()!!.Message)
                 }
             }else{
+                _deliverProgress.postValue(0)
                 _errorMessage.postValue("Error code: ${response.code()} \n Servise bağlanırken bir hata oluştu!")
             }
         }
