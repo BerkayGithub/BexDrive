@@ -51,7 +51,7 @@ class VisitedAddressFragment : Fragment() {
                 }
             }
             val viewManager = LinearLayoutManager(requireContext())
-            val visServiceAdapter = VisitedServiceAdapter(list)
+            val visServiceAdapter = VisitedServiceAdapter(list, requireActivity())
             Visited_recycler_view.apply {
                 setHasFixedSize(true)
                 layoutManager = viewManager

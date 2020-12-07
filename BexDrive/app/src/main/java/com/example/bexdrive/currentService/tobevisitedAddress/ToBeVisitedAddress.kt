@@ -1,5 +1,7 @@
 package com.example.bexdrive.currentService.tobevisitedAddress
 
+import android.Manifest
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -11,8 +13,7 @@ import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.view.get
@@ -46,6 +47,7 @@ class ToBeVisitedAddress : Fragment() {
     private val viewModel: ToBeVisitedAddressViewModel by viewModels()
     private lateinit var list: List<Service>
     private var addressList: ArrayList<com.example.bexdrive.entity.Address> = ArrayList()
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +59,9 @@ class ToBeVisitedAddress : Fragment() {
 
         val sharedPreferences = requireActivity().getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
         viewModel.sharedPreferences = sharedPreferences
+
+        progressDialog = ProgressDialog(requireContext(), R.style.ProgressDialogStyle)
+        progressDialog.setMessage("Lütfen Bekleyiniz...")
 
         binding.btnCheckCurrentService.setOnClickListener {
             binding.ToBeVisitedRecyclerView.visibility = VISIBLE
@@ -96,6 +101,11 @@ class ToBeVisitedAddress : Fragment() {
                 relLayout2_main.visibility = VISIBLE
                 ToBeVisited_recycler_view.visibility = VISIBLE
                 btn_checkCurrentService.visibility = GONE
+            }else {
+                relLayout_main.visibility = VISIBLE
+                relLayout2_main.visibility = GONE
+                ToBeVisited_recycler_view.visibility = INVISIBLE
+                btn_checkCurrentService.visibility = VISIBLE
             }
 
             addressList.clear()
@@ -114,6 +124,13 @@ class ToBeVisitedAddress : Fragment() {
 
             ToBeVisited_progress.visibility = GONE
             lin_Layout_main.visibility = VISIBLE
+        }
+
+        viewModel.startEndServiceProgressLiveData().observe(viewLifecycleOwner){
+            if (it == 1)
+                progressDialog.show()
+            if (it == 0)
+                progressDialog.dismiss()
         }
 
         viewModel.getServiceData()

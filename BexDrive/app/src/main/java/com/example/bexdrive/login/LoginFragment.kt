@@ -1,12 +1,16 @@
 package com.example.bexdrive.login
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,6 +28,8 @@ class LoginFragment : Fragment(), RegisterListener {
 
     private val viewModel: LoginViewModel by viewModels()
 
+    private lateinit var myProgress: ProgressBar
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,6 +44,8 @@ class LoginFragment : Fragment(), RegisterListener {
         val sharedPreferences = requireActivity().getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
         viewModel.sharedPreferences = sharedPreferences
 
+        myProgress = ProgressBar(requireContext())
+
         return binding.root
     }
 
@@ -48,6 +56,13 @@ class LoginFragment : Fragment(), RegisterListener {
 
         viewModel.successLiveData().observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
+
+        viewModel.loginProgressLiveData().observe(viewLifecycleOwner){
+            if(it == 1)
+                login_pBar1.visibility = VISIBLE
+            if(it == 0)
+                login_pBar1.visibility = GONE
         }
 
         view.let { _ ->

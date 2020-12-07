@@ -47,11 +47,13 @@ class RegisterViewModel @ViewModelInject constructor(
     private val _message: MutableLiveData<String> = MutableLiveData()
     private val _snackbarLiveEvent: MutableLiveData<String> = MutableLiveData()
     private val _navigateLoginPageLiveEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
+    private val _registerProgress: MutableLiveData<Int> = MutableLiveData()
 
     fun successLiveData(): LiveData<String> = _successLiveEvent
     fun navigateLoginPageLiveData(): LiveData<Boolean> = _navigateLoginPageLiveEvent
     fun messageLiveData(): LiveData<String> = _message
     fun snackbarLiveData(): LiveData<String> = _snackbarLiveEvent
+    fun registerProgressLiveData(): LiveData<Int> = _registerProgress
 
     fun onRegisterButtonClicked(){
         if(username.isEmpty() || password.isEmpty()){
@@ -70,6 +72,7 @@ class RegisterViewModel @ViewModelInject constructor(
         }
 
         viewModelScope.launch {
+            _registerProgress.postValue(1)
             //First get the arguments to give to the services
             val text = "$inputName:$inputPassword"
             val base64Str : String
@@ -98,6 +101,7 @@ class RegisterViewModel @ViewModelInject constructor(
                     //Start working the checkDeviceRegistration service
                     registerResponse = repository.userLogin("Bearer $accessToken", UUID, "", manufacturer, "Android", serial, version)
                 } else {
+                    _registerProgress.postValue(0)
                     _snackbarLiveEvent.postValue("Error code : ${getTokenResponse.code()}  \n" +
                             "Servise bağlanırken hata oluştu!")
                 }
@@ -110,6 +114,7 @@ class RegisterViewModel @ViewModelInject constructor(
                             status = this.Status!!
                             when (status) {
                                 2 -> {//passive
+                                    _registerProgress.postValue(0)
                                     _message.postValue("Bu cihaz pasiftir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
                                     Log.e("Register Response : " , "Bu cihaz pasiftir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
                                             " Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
@@ -129,6 +134,7 @@ class RegisterViewModel @ViewModelInject constructor(
                                     _navigateLoginPageLiveEvent.postValue(true)
                                 }
                                 0 -> {//created
+                                    _registerProgress.postValue(0)
                                     _message.postValue("Cihaz sisteme eklenmiştir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
                                             " Tanımlama işlemi tamamlandıktan sonra cihazı kapatıp açınız.")
                                     Log.e("Register Response : " , "Cihaz sisteme eklenmiştir. Lütfen sistem yöneticisinden cihazı aktif cihazlar listesine eklemesini söyleyiniz : Serial : $serial.\n" +
@@ -138,11 +144,13 @@ class RegisterViewModel @ViewModelInject constructor(
                             }
                             //Register başarıyla bittiyse proxyAPI'dan token almak için api/auth/token servisini çalıştır.
                         }else{
+                            _registerProgress.postValue(0)
                             _snackbarLiveEvent.postValue("Cihaz kayıt edilemedi!")
                         }
                     }
 
                 }else{
+                    _registerProgress.postValue(0)
                     _snackbarLiveEvent.postValue("Error code : ${registerResponse.code()} \nServise bağlanırken hata oluştu!")
                 }
             }

@@ -30,6 +30,7 @@
         <activity android:name=".activity.ShowAddressOnMap"
             android:screenOrientation="nosensor"/>
         <activity android:name=".activity.ChangeLocationActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="nosensor"/>
         <activity
             android:name=".activity.MainActivity"

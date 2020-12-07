@@ -24,11 +24,13 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
     var estimatedStartTime : MutableLiveData<String> = MutableLiveData("")
     var estimatedEndTime: MutableLiveData<String> = MutableLiveData("")
     var serviceStateMessage: MutableLiveData<String> = MutableLiveData()
+    private val _startEndProgress: MutableLiveData<Int> = MutableLiveData()
 
     private var serviceList: MutableLiveData<List<Service>> = MutableLiveData()
 
     fun serviceListLiveData(): LiveData<List<Service>> = serviceList
     fun serviceStateMessageLiveData(): LiveData<String> = serviceStateMessage
+    fun startEndServiceProgressLiveData(): LiveData<Int> = _startEndProgress
 
     fun getServiceData(){
         val bearerToken = sharedPreferences.getString("BearerToken", "")
@@ -80,9 +82,11 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
         }
 
         viewModelScope.launch {
+            _startEndProgress.postValue(1)
             val startServiceResponse = repository.startService("Bearer $bearerToken", DaggerClass.service!![0].ServiceID, DaggerClass.location!!)
             if (startServiceResponse.isSuccessful){
                 if (startServiceResponse.body()!!.Result){
+                    _startEndProgress.postValue(0)
                     serviceStateMessage.postValue("Servis Başlatıldı.")
 
                     val serviceValues : List<Service>
@@ -124,9 +128,11 @@ class ToBeVisitedAddressViewModel @ViewModelInject constructor(
         }
 
         viewModelScope.launch {
+            _startEndProgress.postValue(1)
             val endServiceResponse = repository.endService("Bearer $bearerToken", DaggerClass.service!![0].ServiceID, DaggerClass.location!!)
             if(endServiceResponse.isSuccessful){
                 if (endServiceResponse.body()!!.Result){
+                    _startEndProgress.postValue(0)
                     serviceStateMessage.postValue("Servis Bitirildi.")
 
                     val serviceValues : List<Service>

@@ -24,9 +24,11 @@ class LoginViewModel @ViewModelInject constructor(
 
     private val _successLiveEvent: MutableLiveData<String> = MutableLiveData()
     private val _navigateMainPageLiveEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
+    private val _loginProgress: MutableLiveData<Int> = MutableLiveData()
 
     fun successLiveData(): LiveData<String> = _successLiveEvent
     fun navigateMainPageLiveData(): LiveData<Boolean> = _navigateMainPageLiveEvent
+    fun loginProgressLiveData(): LiveData<Int> = _loginProgress
 
     lateinit var sharedPreferences: SharedPreferences
 
@@ -37,6 +39,7 @@ class LoginViewModel @ViewModelInject constructor(
         }
 
         viewModelScope.launch {
+            _loginProgress.postValue(1)
             var loginResponse : Response<LoginResponse>? = null
             val tokenResponse: Response<CenterTokenResponse> = repository.getToken("Basic $basicProxyToken")
             if (tokenResponse.isSuccessful){
@@ -48,7 +51,8 @@ class LoginViewModel @ViewModelInject constructor(
 
                 loginResponse = repository.userLogin("Bearer $accessToken", username, password)
             }else{
-                _successLiveEvent.postValue("Error code : ${tokenResponse.code()} while getting second token")
+                _loginProgress.postValue(0)
+                _successLiveEvent.postValue("Error code : ${tokenResponse.code()} while logging in!")
             }
 
             loginResponse?.let {
@@ -62,6 +66,7 @@ class LoginViewModel @ViewModelInject constructor(
                         }
                     }
                 }else{
+                    _loginProgress.postValue(0)
                     _successLiveEvent.postValue("Error code : ${loginResponse.code()} during login service!")
                 }
             }

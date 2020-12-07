@@ -47,4 +47,7 @@
     <string name="durak_say_s">Durak Sayısı</string>
     <string name="ayarlar">Ayarlar</string>
     <string name="k">Çıkış</string>
+    <string name="ara">ARA</string>
+    <string name="nokta_aray_n_z">Nokta Arayınız</string>
+    <string name="adresi_uanki_konumla_g_ncelle">Adresi Şuanki Konumla Güncelle</string>
 </resources>

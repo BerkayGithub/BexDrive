@@ -23,13 +23,14 @@ import com.example.bexdrive.entity.Address
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.service_address_detail_page_fragment.*
+import java.text.DateFormat
 
 @AndroidEntryPoint
 class ServiceAddressDetailPage : Fragment() {
 
     private val viewModel: ServiceAddressDetailPageViewModel by viewModels()
     lateinit var address: Address
-    lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +52,15 @@ class ServiceAddressDetailPage : Fragment() {
         }
         viewModel.addressName = address.Address
         viewModel.fullAddress = address.PointName
-        viewModel.deliveryDate = "Tahmini teslim tarihi ${address.EstimatedDateDelivered.toLocaleString()}"
+        val deliveryDateTime : String
+        if(address.IsVisited){
+            binding.btnDeliverAddressDetail.visibility = GONE
+            deliveryDateTime = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(address.DateDelivered)
+            viewModel.deliveryDate = "Teslim tarihi: $deliveryDateTime"
+        }else{
+            deliveryDateTime = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(address.EstimatedDateDelivered)
+            viewModel.deliveryDate = "Tahmini teslim tarihi $deliveryDateTime"
+        }
 
         viewModel.ServiceID = DaggerClass.service!![0].ServiceID
         viewModel.AddressID = address.AddressID
@@ -62,7 +71,7 @@ class ServiceAddressDetailPage : Fragment() {
         }
 
         progressDialog = ProgressDialog(requireContext(), R.style.ProgressDialogStyle)
-        progressDialog.setMessage("Please Wait...")
+        progressDialog.setMessage("Lütfen Bekeyiniz...")
 
         return binding.root
     }
@@ -72,7 +81,7 @@ class ServiceAddressDetailPage : Fragment() {
 
         viewModel.successMessageLiveData().observe(viewLifecycleOwner){
             val builder = AlertDialog.Builder(requireActivity(), R.style.CustomDialogTheme)
-            builder.setTitle("Success").setMessage(it).setPositiveButton("OK") { _: DialogInterface, _: Int ->
+            builder.setMessage(it).setPositiveButton("OK") { _: DialogInterface, _: Int ->
                 val intent = Intent(requireActivity(), MainActivity::class.java)
                 startActivity(intent)
             }
@@ -80,9 +89,9 @@ class ServiceAddressDetailPage : Fragment() {
         }
 
         viewModel.errorMessageLiveData().observe(viewLifecycleOwner){
-            val snackbar = Snackbar.make(address_detail_layout, it, Snackbar.LENGTH_INDEFINITE)
-            snackbar.setAction("OK") { snackbar.dismiss() }
-            snackbar.show()
+            val snackBar = Snackbar.make(address_detail_layout, it, Snackbar.LENGTH_INDEFINITE)
+            snackBar.setAction("OK") { snackBar.dismiss() }
+            snackBar.show()
         }
 
         viewModel.packageListLiveData().observe(viewLifecycleOwner){

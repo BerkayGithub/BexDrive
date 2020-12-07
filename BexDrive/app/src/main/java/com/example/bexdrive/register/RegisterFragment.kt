@@ -66,6 +66,13 @@ class RegisterFragment : Fragment(){
             }
         }
 
+        viewModel.registerProgressLiveData().observe(viewLifecycleOwner){
+            if (it == 1)
+                reg_pBar1.visibility = VISIBLE
+            if (it == 0)
+                reg_pBar1.visibility = GONE
+        }
+
         view?.let {view ->
             viewModel.navigateLoginPageLiveData().observe(viewLifecycleOwner) {
                 if (it) {

@@ -23,7 +23,19 @@
         android:background="@drawable/screen"
         android:padding="150dp"
         style="?android:attr/progressBarPadding"
-        android:elevation="2dp" />
+        android:elevation="3dp" />
+
+    <ProgressBar
+        android:id="@+id/reg_pBar1"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.23000002"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/lin_Layout_register"

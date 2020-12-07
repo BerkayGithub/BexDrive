@@ -105,6 +105,18 @@
 
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/login_pBar1"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.29000002"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -12,6 +12,8 @@ import com.example.bexdrive.R
 import com.example.bexdrive.activity.ServiceAddressDetailActivity
 import com.example.bexdrive.databinding.ServiceRowBinding
 import com.example.bexdrive.entity.Address
+import com.example.bexdrive.repository.ProxyRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.service_row.view.*
 
 class ServiceAdapter (
