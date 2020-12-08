@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_toBeVisitedAddress"
+        android:title="@string/ziyaret_edilecek_adresler" />
+    <item
+        android:id="@+id/nav_mapFragment"
+        android:title="@string/harita"/>
+    <item
+        android:id="@+id/nav_visitedAddressFragment"
+        android:title="@string/u_ranan_adresler"/>
+    <item
+        android:id="@+id/nav_detailFragment"
+        android:title="@string/detay"/>
+</menu>

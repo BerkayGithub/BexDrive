@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="point"
+            type="com.example.bexdrive.entity.Point" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:cardCornerRadius="5dp"
+        android:layout_marginBottom="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:background="@drawable/layout_background">
+
+            <TextView
+                android:id="@+id/pointName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{point.name}"
+                android:hint="Point Name"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="@color/color_black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/pointAddress"/>
+
+            <TextView
+                android:id="@+id/pointAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:text="@{point.address}"
+                android:hint="Point Address"
+                android:textColor="@color/color_black"
+                app:layout_constraintTop_toBottomOf="@id/pointName"
+                app:layout_constraintBottom_toTopOf="@id/btn_update_address"/>
+
+            <Button
+                android:id="@+id/btn_update_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/adresi_uanki_konumla_g_ncelle"
+                android:textColor="@color/color_white"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@color/color_blue2"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/pointAddress"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

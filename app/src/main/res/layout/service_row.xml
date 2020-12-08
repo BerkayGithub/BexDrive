@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<data>
+    <variable
+        name="address"
+        type="com.example.bexdrive.entity.Address" />
+</data>
+
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="30dp">
+
+    <LinearLayout
+        android:id="@+id/lin_Layout_serviceRow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@drawable/layout_background">
+
+        <TextView
+            android:id="@+id/txt_ItemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:text="@{address.pointName}"
+            android:textColor="@color/color_black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_Item_serviceAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:text="@{address.address}" />
+
+        <TextView
+            android:id="@+id/txt_Item_deliveryDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:text="@{String.format(@string/tahmini_tslm_tarihi, address.getFormattedDate(address.estimatedDateDelivered))}"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btn_show_In_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/haritada_g_ster"
+            android:background="@drawable/button_background"
+            android:backgroundTint="#5D6CB3"
+            android:textColor="@color/color_white"
+            android:textSize="17sp"/>
+
+        <Button
+            android:id="@+id/btn_show_packages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/paketleri_g_ster"
+            android:background="@drawable/button_background"
+            android:backgroundTint="@color/color_blue2"
+            android:textColor="@color/color_white"
+            android:textSize="17sp"/>
+
+        <Button
+            android:id="@+id/btn_deliver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/teslim_et"
+            android:background="@drawable/button_background"
+            android:backgroundTint="@color/color_green2"
+            android:textColor="@color/color_white"
+            android:textSize="17sp"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+
+</layout>

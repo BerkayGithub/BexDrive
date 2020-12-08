@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.bexdrive">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"
+        android:required="true"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:required="true"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:required="true"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
+        android:required="true"/>
+
+    <application
+        android:name=".DaggerClass"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value=""/>
+
+        <activity android:name=".activity.ServiceAddressDetailActivity"
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="nosensor"/>
+        <activity android:name=".activity.ShowAddressOnMap"
+            android:screenOrientation="nosensor"/>
+        <activity android:name=".activity.ChangeLocationActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="nosensor"/>
+        <activity
+            android:name=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="nosensor"/>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

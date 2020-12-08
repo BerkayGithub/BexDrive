@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".currentService.tobevisitedAddress.ToBeVisitedAddress"
+    android:id="@+id/layout_to_be_visited">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.bexdrive.currentService.tobevisitedAddress.ToBeVisitedAddressViewModel" />
+    </data>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:id="@+id/ToBeVisited_progress"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:indeterminateDrawable="@drawable/loading_gif2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lin_Layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/ToBeVisited_Info_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@={viewmodel.responseMessage}"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/btn_checkCurrentService"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_checkCurrentService"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_background"
+                android:text="@string/mevcut_servisimi_kontrol_et"
+                android:textColor="@color/color_white"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toTopOf="@id/relLayout_main"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ToBeVisited_Info_txt" />
+
+            <RelativeLayout
+                android:id="@+id/relLayout_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/layout_background"
+                app:layout_constraintBottom_toTopOf="@id/ToBeVisited_recycler_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_checkCurrentService">
+
+                <TextView
+                    android:id="@+id/txt_Yla_çkm_hzr_msnz"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/yola_kmaya_haz_r_m_s_n_z"
+                    android:textColor="@color/color_black"
+                    android:textSize="35sp" />
+
+                <TextView
+                    android:id="@+id/txt_srv_bsl_zyr_edb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_Yla_çkm_hzr_msnz"
+                    android:padding="10dp"
+                    android:text="@string/servisi_ba_latarak_adresleri_ziyaret_edebilirsiniz"
+                    android:textColor="@color/color_black" />
+
+                <TextView
+                    android:id="@+id/txt_thm_bsl_trh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_srv_bsl_zyr_edb"
+                    android:padding="10dp"
+                    android:text="@={viewmodel.estimatedStartTime}"
+                    android:textColor="@color/color_black" />
+
+                <View
+                    android:id="@+id/view_relLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/txt_thm_bsl_trh"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@android:color/darker_gray" />
+
+                <Button
+                    android:id="@+id/btn_start_service"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/view_relLayout1"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/button_background"
+                    android:backgroundTint="@color/color_blue2"
+                    android:onClick="@{() -> viewmodel.startService()}"
+                    android:text="@string/servisi_ba_lat"
+                    android:textColor="@color/color_white"
+                    android:textSize="17sp" />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ToBeVisited_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/relLayout2_main"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/relLayout_main"
+                tools:listitem="@layout/service_row" />
+
+            <RelativeLayout
+                android:id="@+id/relLayout2_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/layout_background"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ToBeVisited_recycler_view">
+
+                <TextView
+                    android:id="@+id/txt_tbrk_tm_srv_tmm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/tebrikler_t_m_adresleri_tamamlad_n_z"
+                    android:textColor="@color/color_black"
+                    android:textSize="35sp" />
+
+                <TextView
+                    android:id="@+id/txt_srv_btr_snr_srv_ulş"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_tbrk_tm_srv_tmm"
+                    android:padding="10dp"
+                    android:text="@string/servisi_bitirerek_bir_sonraki_servise_ait_bilgilere_ula_abilirsiniz"
+                    android:textColor="@color/color_black" />
+
+                <TextView
+                    android:id="@+id/txt_thm_bt_trh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_srv_btr_snr_srv_ulş"
+                    android:padding="10dp"
+                    android:text="@={viewmodel.estimatedEndTime}"
+                    android:textColor="@color/color_black" />
+
+                <View
+                    android:id="@+id/view_relLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/txt_thm_bt_trh"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@android:color/darker_gray" />
+
+                <Button
+                    android:id="@+id/btn_go_to_shipping"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/view_relLayout2"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/button_background"
+                    android:backgroundTint="@color/color_blue2"
+                    android:text="@string/sevkiyat_noktas_na_git"
+                    android:textColor="@color/color_white"
+                    android:textSize="17sp" />
+
+                <Button
+                    android:id="@+id/btn_end_service"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_go_to_shipping"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/button_background"
+                    android:onClick="@{() -> viewmodel.endService()}"
+                    android:text="@string/servisi_bitir"
+                    android:textColor="@color/color_white"
+                    android:textSize="17sp" />
+
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
+
+</layout>
