@@ -1,8 +1,11 @@
 package com.example.bexdrive.currentService.tobevisitedAddress
 
 import android.Manifest
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Address
@@ -25,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bexdrive.DaggerClass
 
 import com.example.bexdrive.R
+import com.example.bexdrive.activity.MainActivity
 import com.example.bexdrive.databinding.ToBeVisitedAddressFragmentBinding
 import com.example.bexdrive.entity.Location
 import com.example.bexdrive.entity.Service
@@ -40,6 +44,7 @@ import kotlinx.android.synthetic.main.to_be_visited_address_fragment.*
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class ToBeVisitedAddress : Fragment() {
@@ -150,7 +155,14 @@ class ToBeVisitedAddress : Fragment() {
                     e.printStackTrace()
                 }
             }else{
-
+                val builder = AlertDialog.Builder(requireActivity(), R.style.CustomDialogTheme)
+                builder.setMessage("Lokasyon bilgisi alınamadı!").setPositiveButton("Tekrar Dene") { _: DialogInterface, _: Int ->
+                    getLocation()
+                }.setNegativeButton("Uygulamayı Kapat") { _: DialogInterface, _: Int ->
+                    requireActivity().finish()
+                    exitProcess(0)
+                }
+                builder.show()
             }
         }
     }
