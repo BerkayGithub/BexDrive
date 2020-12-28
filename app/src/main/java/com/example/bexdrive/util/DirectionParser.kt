@@ -8,7 +8,7 @@ import java.lang.Exception
 
 class DirectionParser {
 
-    public fun parse(jObject : JSONObject) : List<List<HashMap<String, String>>>{
+    fun parse(jObject : JSONObject) : List<List<HashMap<String, String>>>{
         var routes = ArrayList<List<HashMap<String, String>>>()
         var jRoutes: JSONArray? = null
         var jLegs: JSONArray? = null
@@ -75,7 +75,7 @@ class DirectionParser {
                 shift += 5
             } while (b >= 0x20)
             var dlng = (if ((result and 1) !== 0) (result shr 1).inv() else (result shr 1))
-            lat += dlng
+            lng += dlng
             val p = LatLng(((lat / 1E5)), ((lng / 1E5)));
             poly.add(p)
         }

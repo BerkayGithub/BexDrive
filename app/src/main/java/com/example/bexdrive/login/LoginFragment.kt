@@ -12,6 +12,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -29,6 +30,7 @@ class LoginFragment : Fragment(), RegisterListener {
     private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var myProgress: ProgressBar
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,10 +43,8 @@ class LoginFragment : Fragment(), RegisterListener {
             viewModel.basicProxyToken = requireArguments().getString("basicProxyToken")!!
         }
 
-        val sharedPreferences = requireActivity().getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
-        viewModel.sharedPreferences = sharedPreferences
-
         myProgress = ProgressBar(requireContext())
+        progressBar = binding.loginProgressBar
 
         return binding.root
     }
@@ -58,10 +58,13 @@ class LoginFragment : Fragment(), RegisterListener {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
 
-        viewModel.loginProgressLiveData().observe(viewLifecycleOwner){
+        viewModel.loginMyProgressLiveData().observe(viewLifecycleOwner){
             if(it == 1)
                 login_pBar1.visibility = VISIBLE
             if(it == 0)
+                if (progressBar.isVisible){
+                    progressBar.visibility = GONE
+                }
                 login_pBar1.visibility = GONE
         }
 
@@ -85,6 +88,19 @@ class LoginFragment : Fragment(), RegisterListener {
 
     override fun onFailure(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onStart() {
+        val sharedPreferences = requireActivity().getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
+        viewModel.sharedPreferences = sharedPreferences
+        if (!sharedPreferences.getString("Username", "").isNullOrEmpty() && !sharedPreferences.getString("Password", "").isNullOrEmpty()){
+            viewModel.username = sharedPreferences.getString("Username", "").toString()
+            viewModel.password = sharedPreferences.getString("Password", "").toString()
+            viewModel.onLoginButtonClicked()
+        }else{
+            progressBar.visibility = GONE
+        }
+        super.onStart()
     }
 
 }

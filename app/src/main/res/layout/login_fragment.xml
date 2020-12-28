@@ -15,6 +15,15 @@
     android:layout_height="match_parent"
     android:background="@drawable/loginbackground">
 
+    <ProgressBar
+        android:id="@+id/login_progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/screen"
+        android:elevation="3dp"
+        style="?android:attr/progressBarPadding"
+        android:padding="150dp"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

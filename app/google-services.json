@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "623089456569",
+    "project_id": "bexdrive-2e620",
+    "storage_bucket": "bexdrive-2e620.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623089456569:android:fa92a8dfabae64037cd268",
+        "android_client_info": {
+          "package_name": "com.example.bexdrive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623089456569-1ck8gpkpub7f4p9hs51ihb9e0rubro8j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bexdrive",
+            "certificate_hash": "1dd61641fee196a94368d73a040d7873a98e609e"
+          }
+        },
+        {
+          "client_id": "623089456569-ij8ni1kvekb4itsrjr0saq0k7qi99tou.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bexdrive",
+            "certificate_hash": "c9b662a6861cb9b5dc3d8e32c476955703f7c91e"
+          }
+        },
+        {
+          "client_id": "623089456569-nkv1fei38r8tl2gll6esfgmkhg3cr44m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDei0vd59Zry_hU5aSgdnijRHU32556x6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623089456569-nkv1fei38r8tl2gll6esfgmkhg3cr44m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -32,6 +32,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.lang.NullPointerException
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -55,18 +56,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        //binding.mapsView1.onCreate(null)
-        //binding.mapsView1.onResume()
-        //binding.mapsView1.getMapAsync(this)
+        binding.mapsView1.onCreate(null)
+        binding.mapsView1.onResume()
+        binding.mapsView1.getMapAsync(this)
 
         if (DaggerClass.service != null) {
             addressList = DaggerClass.service!![0].Addresses
         }
 
-        //val place1 = MarkerOptions().position(LatLng(40.986371, 29.131858)).title("Location1")
-        //val place2 = MarkerOptions().position(LatLng(40.985273, 29.132687)).title("Location2")
-        //markers.add(place1)
-        //markers.add(place2)
+        val place1 = MarkerOptions().position(LatLng(40.986371, 29.131858)).title("Location1")
+        val place2 = MarkerOptions().position(LatLng(40.985273, 29.132687)).title("Location2")
+        markers.add(place1)
+        markers.add(place2)
 
         return binding.root
     }
@@ -130,7 +131,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             checkPermission()
             googleMap.addMarker(markers[0])
             googleMap.addMarker(markers[1])
-            //TaskDirectionRequest(googleMap, requireContext()).execute(getUrl(markers, "driving")) this function currently gives an error.
+            //TaskDirectionRequest(googleMap, requireContext()).execute(getUrl(markers, "driving"))
         }
     }
 
@@ -145,13 +146,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         override fun doInBackground(vararg p0: String?): String {
             var responseString = ""
             try {
-                responseString = requestDirection(p0[0]!!)
+                val check = p0[0]
+                responseString = requestDirection(check!!)
             } catch (e : java.lang.Exception) {
                 e.printStackTrace()
             }
             return responseString
         }
 
+        @Throws(IOException::class)
         private fun requestDirection(requestedUrl : String) : String{
             var responseString = ""
             var inputStream : InputStream? = null
@@ -167,7 +170,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 val stringBuffer = StringBuffer()
                 var line = ""
-                while (bufferedReader.readLine() != null) {
+                while ((bufferedReader.readLine()) != null) {
                     line = bufferedReader.readLine()
                     stringBuffer.append(line)
                 }
@@ -198,7 +201,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             var jsonObject : JSONObject? = null
 
             try {
-                jsonObject = JSONObject(p0[0]!!)
+                jsonObject = JSONObject(p0.toString())
                 val parser = DirectionParser()
                 routes = parser.parse(jsonObject)
             } catch (e : JSONException) {

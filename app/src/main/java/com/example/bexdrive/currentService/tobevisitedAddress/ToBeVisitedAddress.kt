@@ -75,11 +75,10 @@ class ToBeVisitedAddress : Fragment() {
 
         if(DaggerClass.location == null){
             if(ActivityCompat.checkSelfPermission(requireActivity(),
-                    android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                getLocation()
+                    android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 44)
             }else{
-                ActivityCompat.requestPermissions(requireActivity(),
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 44)
+                getLocation()
             }
         }
 
@@ -163,6 +162,23 @@ class ToBeVisitedAddress : Fragment() {
                     exitProcess(0)
                 }
                 builder.show()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode==44 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
             }
         }
     }
